@@ -4,25 +4,53 @@ import { getPostUrlBySlug } from "@utils/url-utils";
 import PostCard from "./PostCard.astro";
 
 const { page } = Astro.props;
+const posts = page.data as CollectionEntry<"posts">[];
+const sections = [
+	{ title: "Affiliation", category: "career" },
+	{ title: "Competitions", category: "competitions" },
+	{ title: "Projects", category: "projects" },
+	{ title: "Study Notes", category: "notes" },
+];
 
 let delay = 0;
 const interval = 50;
 ---
-<div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4">
-    {page.data.map((entry: CollectionEntry<"posts">) => (
-        <PostCard
-                entry={entry}
-                title={entry.data.title}
-                tags={entry.data.tags}
-                category={entry.data.category}
-                published={entry.data.published}
-                updated={entry.data.updated}
-                url={getPostUrlBySlug(entry.slug)}
-                image={entry.data.image}
-                description={entry.data.description}
-                draft={entry.data.draft}
-                class:list="onload-animation"
-                style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
-        ></PostCard>
-    ))}
+
+<div class="home-sections">
+	{sections.map((section) => {
+		const sectionPosts = posts.filter(
+			(entry) => entry.data.category?.toLowerCase() === section.category,
+		);
+		if (sectionPosts.length === 0) return null;
+
+		return (
+			<section class="home-section">
+				<h2>{section.title}</h2>
+				<div class="post-list">
+					{sectionPosts.map((entry) => (
+						<PostCard
+							entry={entry}
+							title={entry.data.title}
+							tags={entry.data.tags}
+							category={entry.data.category}
+							published={entry.data.published}
+							updated={entry.data.updated}
+							url={getPostUrlBySlug(entry.slug)}
+							image={entry.data.image}
+							description={entry.data.description}
+							draft={entry.data.draft}
+							class:list="onload-animation"
+							style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+						></PostCard>
+					))}
+				</div>
+			</section>
+		);
+	})}
 </div>
+
+<style>
+	.home-sections { display: grid; gap: 3rem; }
+	.home-section h2 { margin: 0 0 1rem .45rem; color: var(--text-90); font-size: 1.25rem; font-weight: 800; letter-spacing: -.04em; }
+	.post-list { display: flex; flex-direction: column; gap: 1rem; }
+</style>

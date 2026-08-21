@@ -1,151 +1,112 @@
 <script lang="ts">
-import { onMount } from "svelte";
+  import { getPostUrlBySlug } from "../utils/url-utils";
 
-import I18nKey from "../i18n/i18nKey";
-import { i18n } from "../i18n/translation";
-import { getPostUrlBySlug } from "../utils/url-utils";
+  export let sortedPosts: Post[] = [];
+  interface Post {
+    slug: string;
+    data: { title: string; tags: string[]; category?: string | null; role?: string; published: Date; };
+  }
 
-export let tags: string[];
-export let categories: string[];
-export let sortedPosts: Post[] = [];
-
-const params = new URLSearchParams(window.location.search);
-tags = params.has("tag") ? params.getAll("tag") : [];
-categories = params.has("category") ? params.getAll("category") : [];
-const uncategorized = params.get("uncategorized");
-
-interface Post {
-	slug: string;
-	data: {
-		title: string;
-		tags: string[];
-		category?: string;
-		published: Date;
-	};
-}
-
-interface Group {
-	year: number;
-	posts: Post[];
-}
-
-let groups: Group[] = [];
-
-function formatDate(date: Date) {
-	const month = (date.getMonth() + 1).toString().padStart(2, "0");
-	const day = date.getDate().toString().padStart(2, "0");
-	return `${month}-${day}`;
-}
-
-function formatTag(tagList: string[]) {
-	return tagList.map((t) => `#${t}`).join(" ");
-}
-
-onMount(async () => {
-	let filteredPosts: Post[] = sortedPosts;
-
-	if (tags.length > 0) {
-		filteredPosts = filteredPosts.filter(
-			(post) =>
-				Array.isArray(post.data.tags) &&
-				post.data.tags.some((tag) => tags.includes(tag)),
-		);
-	}
-
-	if (categories.length > 0) {
-		filteredPosts = filteredPosts.filter(
-			(post) => post.data.category && categories.includes(post.data.category),
-		);
-	}
-
-	if (uncategorized) {
-		filteredPosts = filteredPosts.filter((post) => !post.data.category);
-	}
-
-	const grouped = filteredPosts.reduce(
-		(acc, post) => {
-			const year = post.data.published.getFullYear();
-			if (!acc[year]) {
-				acc[year] = [];
-			}
-			acc[year].push(post);
-			return acc;
-		},
-		{} as Record<number, Post[]>,
-	);
-
-	const groupedPostsArray = Object.keys(grouped).map((yearStr) => ({
-		year: Number.parseInt(yearStr, 10),
-		posts: grouped[Number.parseInt(yearStr, 10)],
-	}));
-
-	groupedPostsArray.sort((a, b) => b.year - a.year);
-
-	groups = groupedPostsArray;
-});
+  const isCategory = (name: string) => (post: Post) => post.data.category?.toLowerCase() === name;
+  const oldestFirst = (a: Post, b: Post) => a.data.published.getTime() - b.data.published.getTime();
+  $: careers = sortedPosts.filter(isCategory("career")).sort(oldestFirst);
+  $: competitions = sortedPosts.filter(isCategory("competitions")).sort(oldestFirst);
+  $: projects = sortedPosts.filter(isCategory("projects")).sort(oldestFirst);
+  $: notes = sortedPosts.filter(isCategory("notes")).sort(oldestFirst);
+  const formatDate = (date: Date) => new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "2-digit" })
+    .format(date).replace(/\. /g, ".").replace(/\.$/, "");
 </script>
 
-<div class="card-base px-8 py-6">
-    {#each groups as group}
-        <div>
-            <div class="flex flex-row w-full items-center h-[3.75rem]">
-                <div class="w-[15%] md:w-[10%] transition text-2xl font-bold text-right text-75">
-                    {group.year}
-                </div>
-                <div class="w-[15%] md:w-[10%]">
-                    <div
-                            class="h-3 w-3 bg-none rounded-full outline outline-[var(--primary)] mx-auto
-                  -outline-offset-[2px] z-50 outline-3"
-                    ></div>
-                </div>
-                <div class="w-[70%] md:w-[80%] transition text-left text-50">
-                    {group.posts.length} {i18n(group.posts.length === 1 ? I18nKey.postCount : I18nKey.postsCount)}
-                </div>
+<div class="archive-panel">
+  <section class="archive-section">
+    <h2>Affiliation</h2>
+    <div class="timeline">
+      {#each careers as post}
+        <a class="timeline-item" href={getPostUrlBySlug(post.slug)}>
+          <span class="dot"></span>
+          <div>
+            <h3>{post.data.title}</h3>
+            <div class="meta">
+              {#if post.data.role}<span class="badge">{post.data.role}</span>{/if}
+              <time>{formatDate(post.data.published)} ~ Present</time>
             </div>
+          </div>
+        </a>
+      {:else}
+        <p class="empty">등록된 경력 또는 활동이 없습니다.</p>
+      {/each}
+    </div>
+  </section>
 
-            {#each group.posts as post}
-                <a
-                        href={getPostUrlBySlug(post.slug)}
-                        aria-label={post.data.title}
-                        class="group btn-plain !block h-10 w-full rounded-lg hover:text-[initial]"
-                >
-                    <div class="flex flex-row justify-start items-center h-full">
-                        <!-- date -->
-                        <div class="w-[15%] md:w-[10%] transition text-sm text-right text-50">
-                            {formatDate(post.data.published)}
-                        </div>
+  <section class="archive-section">
+    <h2>Competitions</h2>
+    <div class="project-list">
+      {#each competitions as post}
+        <a class="project-card" href={getPostUrlBySlug(post.slug)}>
+          <h3>{post.data.title}</h3>
+          <div class="meta">
+            {#if post.data.role}<span class="badge">{post.data.role}</span>{/if}
+            <time>{formatDate(post.data.published)}</time>
+          </div>
+        </a>
+      {:else}
+        <p class="empty">등록된 대회 기록이 없습니다.</p>
+      {/each}
+    </div>
+  </section>
 
-                        <!-- dot and line -->
-                        <div class="w-[15%] md:w-[10%] relative dash-line h-full flex items-center">
-                            <div
-                                    class="transition-all mx-auto w-1 h-1 rounded group-hover:h-5
-                       bg-[oklch(0.5_0.05_var(--hue))] group-hover:bg-[var(--primary)]
-                       outline outline-4 z-50
-                       outline-[var(--card-bg)]
-                       group-hover:outline-[var(--btn-plain-bg-hover)]
-                       group-active:outline-[var(--btn-plain-bg-active)]"
-                            ></div>
-                        </div>
+  <section class="archive-section">
+    <h2>Projects</h2>
+    <div class="project-list">
+      {#each projects as post}
+        <a class="project-card" href={getPostUrlBySlug(post.slug)}>
+          <h3>{post.data.title}</h3>
+          <div class="meta">
+            {#if post.data.role}<span class="badge">{post.data.role}</span>{/if}
+            <time>{formatDate(post.data.published)}</time>
+          </div>
+        </a>
+      {:else}
+        <p class="empty">등록된 프로젝트가 없습니다.</p>
+      {/each}
+    </div>
+  </section>
 
-                        <!-- post title -->
-                        <div
-                                class="w-[70%] md:max-w-[65%] md:w-[65%] text-left font-bold
-                     group-hover:translate-x-1 transition-all group-hover:text-[var(--primary)]
-                     text-75 pr-8 whitespace-nowrap overflow-ellipsis overflow-hidden"
-                        >
-                            {post.data.title}
-                        </div>
-
-                        <!-- tag list -->
-                        <div
-                                class="hidden md:block md:w-[15%] text-left text-sm transition
-                     whitespace-nowrap overflow-ellipsis overflow-hidden text-30"
-                        >
-                            {formatTag(post.data.tags)}
-                        </div>
-                    </div>
-                </a>
-            {/each}
-        </div>
-    {/each}
+  {#if notes.length > 0}
+    <section class="archive-section">
+      <h2>Study Notes</h2>
+      <div class="project-list">
+        {#each notes as post}
+          <a class="project-card" href={getPostUrlBySlug(post.slug)}>
+            <h3>{post.data.title}</h3>
+            <div class="meta">
+              {#if post.data.role}<span class="badge">{post.data.role}</span>{/if}
+              <time>{formatDate(post.data.published)}</time>
+            </div>
+          </a>
+        {/each}
+      </div>
+    </section>
+  {/if}
 </div>
+
+<style>
+  .archive-panel { padding: clamp(1.7rem, 5vw, 4rem); background: var(--card-bg); border-radius: var(--radius-large); }
+  .archive-section + .archive-section { margin-top: 4.7rem; }
+  h2, h3, p { margin: 0; }
+  h2, h3 { color: var(--text-90); letter-spacing: -.055em; }
+  h2 { margin-bottom: 2.4rem; font-size: clamp(1.8rem, 3.3vw, 2.3rem); }
+  .timeline { position: relative; display: grid; gap: 2.35rem; padding-left: 2.85rem; }
+  .timeline::before { content: ""; position: absolute; top: .65rem; bottom: .65rem; left: .48rem; width: 2px; background: color-mix(in srgb, var(--primary) 24%, transparent); }
+  .timeline-item { position: relative; display: block; text-decoration: none; }
+  .dot { position: absolute; top: .38rem; left: -2.85rem; width: .98rem; height: .98rem; border: 4px solid var(--card-bg); border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 20%, transparent); }
+  h3 { font-size: 1.15rem; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-top: .75rem; color: var(--text-50); font-size: .86rem; }
+  .badge { padding: .29rem .72rem; border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent); border-radius: 999px; color: var(--primary); background: color-mix(in srgb, var(--primary) 7%, transparent); font-weight: 700; }
+  .project-list { display: grid; gap: 1.15rem; }
+  .project-card { display: block; padding: 1.75rem 1.35rem; border: 1px solid var(--line-divider); border-radius: 1rem; text-decoration: none; transition: border-color .2s, transform .2s, box-shadow .2s; }
+  .project-card h3 { color: var(--primary); }
+  .project-card:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--line-divider)); transform: translateY(-2px); box-shadow: 0 .7rem 1.5rem color-mix(in srgb, var(--primary) 9%, transparent); }
+  .empty { color: var(--text-50); }
+  @media (max-width: 640px) { .archive-panel { padding: 1.6rem; }.archive-section + .archive-section { margin-top: 3.6rem; }.timeline { padding-left: 2.3rem; }.timeline-item .dot { left: -2.3rem; }.project-card { padding: 1.35rem 1.1rem; } }
+</style>

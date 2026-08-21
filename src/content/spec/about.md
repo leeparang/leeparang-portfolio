@@ -1,9 +1,12 @@
-# About
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
+# About Me
 
-::github{repo="saicaca/fuwari"}
+선린인터넷고등학교에서 개발과 보안을 공부하고 있습니다.
 
-> ### Sources of images used in this site
-> - [Unsplash](https://unsplash.com/)
-> - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty)
+- 관심 분야: AI, IoT, Cyber Security
+- 활동: IRIS 2nd Member
+- 목표: AI와 보안을 활용하는 개발자
+
+## Career
+
+- Sunrin Internet High School · 2026.03 ~ Present
+- IRIS 2nd Member · 2026.04 ~ Present

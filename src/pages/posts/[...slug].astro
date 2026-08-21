@@ -24,6 +24,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
+const isProtected = true;
 
 const { remarkPluginFrontmatter } = await entry.render();
 
@@ -102,9 +103,22 @@ const jsonLd = {
             }
 
 
-            <Markdown class="mb-6 markdown-content onload-animation">
-                <Content />
-            </Markdown>
+            {isProtected && (
+                <div class="note-lock mb-6 onload-animation" data-note-lock>
+                    <p>Protected Content</p>
+                    <form data-note-password-form>
+                        <input type="password" inputmode="numeric" autocomplete="current-password" placeholder="Password" aria-label="Study note password" required />
+                        <button type="submit">Open</button>
+                    </form>
+                    <span data-note-password-message></span>
+                </div>
+            )}
+
+            <div data-note-content hidden={isProtected}>
+                <Markdown class="mb-6 markdown-content onload-animation">
+                    <Content />
+                </Markdown>
+            </div>
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 
@@ -134,3 +148,39 @@ const jsonLd = {
     </div>
 
 </MainGridLayout>
+
+<script is:inline>
+    const noteLock = document.querySelector('[data-note-lock]');
+    const noteContent = document.querySelector('[data-note-content]');
+    const noteForm = document.querySelector('[data-note-password-form]');
+    const noteMessage = document.querySelector('[data-note-password-message]');
+    const unlockNotes = () => {
+        if (noteContent) noteContent.hidden = false;
+        if (noteLock) noteLock.hidden = true;
+    };
+
+    if (noteLock && noteContent && sessionStorage.getItem('study-notes-unlocked') === 'true') {
+        unlockNotes();
+    }
+
+    noteForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const input = noteForm.querySelector('input');
+        if (input?.value === '0725') {
+            sessionStorage.setItem('study-notes-unlocked', 'true');
+            unlockNotes();
+        } else if (noteMessage) {
+            noteMessage.textContent = 'Incorrect password.';
+        }
+    });
+</script>
+
+<style>
+    .note-lock { padding: 2.25rem; border: 1px solid var(--line-divider); border-radius: 1rem; background: var(--btn-regular-bg); }
+    .note-lock p { margin: 0 0 1rem; color: var(--text-90); font-size: 1.1rem; font-weight: 800; }
+    .note-lock form { display: flex; gap: .6rem; max-width: 23rem; }
+    .note-lock input { width: 100%; padding: .7rem .85rem; border: 1px solid var(--line-divider); border-radius: .65rem; background: var(--card-bg); color: var(--text-90); outline: none; }
+    .note-lock input:focus { border-color: var(--primary); }
+    .note-lock button { padding: .7rem 1rem; border: 0; border-radius: .65rem; background: var(--primary); color: white; font-weight: 700; cursor: pointer; }
+    .note-lock span { display: block; min-height: 1.2rem; margin-top: .6rem; color: #d74a4a; font-size: .8rem; }
+</style>
