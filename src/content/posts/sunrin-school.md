@@ -1,5 +1,5 @@
 ---
-title: Sunrin Internet High School
+title: Sunrin Internet High School 121th
 published: 2026-03-01
 description: 선린인터넷고등학교 재학
 tags: [School, Development]
