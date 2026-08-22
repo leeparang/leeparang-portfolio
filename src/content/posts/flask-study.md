@@ -9,3 +9,6 @@ category: Notes
 ## Flask Study
 
 Flask 학습 내용을 기록합니다.
+
+https://leeparang10.tistory.com/1
+https://leeparang10.tistory.com/2
