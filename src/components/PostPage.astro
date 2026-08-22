@@ -17,6 +17,13 @@ const interval = 50;
 ---
 
 <div class="home-sections">
+	<nav class="home-category-filter" aria-label="Post categories">
+		<button class="is-active" type="button" data-home-filter="all">All</button>
+		<button type="button" data-home-filter="career">Career</button>
+		<button type="button" data-home-filter="competitions">Competitions</button>
+		<button type="button" data-home-filter="projects">Projects</button>
+		<button type="button" data-home-filter="notes">Study Notes</button>
+	</nav>
 	{sections.map((section) => {
 		const sectionPosts = posts.filter(
 			(entry) => entry.data.category?.toLowerCase() === section.category,
@@ -24,7 +31,7 @@ const interval = 50;
 		if (sectionPosts.length === 0) return null;
 
 		return (
-			<section class="home-section">
+			<section class="home-section" data-home-section={section.category}>
 				<h2>{section.title}</h2>
 				<div class="post-list">
 					{sectionPosts.map((entry) => (
@@ -49,8 +56,32 @@ const interval = 50;
 	})}
 </div>
 
+<script is:inline data-swup-reload>
+	(() => {
+		const filterButtons = document.querySelectorAll("[data-home-filter]");
+		const sections = document.querySelectorAll("[data-home-section]");
+
+		filterButtons.forEach((button) => {
+			button.addEventListener("click", () => {
+				const selected = button.getAttribute("data-home-filter");
+				filterButtons.forEach((item) =>
+					item.classList.toggle("is-active", item === button),
+				);
+				sections.forEach((section) => {
+					const category = section.getAttribute("data-home-section");
+					(section as HTMLElement).hidden = selected !== "all" && category !== selected;
+				});
+			});
+		});
+	})();
+</script>
+
 <style>
 	.home-sections { display: grid; gap: 3rem; }
+	.home-category-filter { display: flex; flex-wrap: wrap; gap: .55rem; padding: .2rem .45rem 0; }
+	.home-category-filter button { padding: .48rem .85rem; border: 1px solid var(--line-divider); border-radius: 999px; background: var(--card-bg); color: var(--text-50); font-size: .82rem; font-weight: 700; transition: .18s ease; }
+	.home-category-filter button:hover { border-color: var(--primary); color: var(--primary); }
+	.home-category-filter button.is-active { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--card-bg)); color: var(--primary); }
 	.home-section h2 { margin: 0 0 1rem .45rem; color: var(--text-90); font-size: 1.25rem; font-weight: 800; letter-spacing: -.04em; }
 	.post-list { display: flex; flex-direction: column; gap: 1rem; }
 </style>
