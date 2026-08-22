@@ -149,30 +149,35 @@ const jsonLd = {
 
 </MainGridLayout>
 
-<script is:inline>
-    const noteLock = document.querySelector('[data-note-lock]');
-    const noteContent = document.querySelector('[data-note-content]');
-    const noteForm = document.querySelector('[data-note-password-form]');
-    const noteMessage = document.querySelector('[data-note-password-message]');
-    const unlockNotes = () => {
-        if (noteContent) noteContent.hidden = false;
-        if (noteLock) noteLock.hidden = true;
-    };
+<script is:inline data-swup-reload>
+    (() => {
+        const noteLock = document.querySelector('[data-note-lock]');
+        const noteContent = document.querySelector('[data-note-content]');
+        const noteForm = document.querySelector('[data-note-password-form]');
+        const noteMessage = document.querySelector('[data-note-password-message]');
+        const unlockNotes = () => {
+            if (noteContent) noteContent.hidden = false;
+            if (noteLock) noteLock.hidden = true;
+        };
 
-    if (noteLock && noteContent && sessionStorage.getItem('study-notes-unlocked') === 'true') {
-        unlockNotes();
-    }
-
-    noteForm?.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const input = noteForm.querySelector('input');
-        if (input?.value === '0725') {
-            sessionStorage.setItem('study-notes-unlocked', 'true');
+        if (noteLock && noteContent && sessionStorage.getItem('study-notes-unlocked') === 'true') {
             unlockNotes();
-        } else if (noteMessage) {
-            noteMessage.textContent = 'Incorrect password.';
         }
-    });
+
+        if (noteForm && noteForm.dataset.lockReady !== 'true') {
+            noteForm.dataset.lockReady = 'true';
+            noteForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const input = noteForm.querySelector('input');
+                if (input?.value === '0725') {
+                    sessionStorage.setItem('study-notes-unlocked', 'true');
+                    unlockNotes();
+                } else if (noteMessage) {
+                    noteMessage.textContent = 'Incorrect password.';
+                }
+            });
+        }
+    })();
 </script>
 
 <style>
