@@ -9,3 +9,6 @@ category: Notes
 ## Computer Vision Study
 
 컴퓨터 비전 학습 내용을 기록합니다.
+
+https://leeparang10.tistory.com/30
+https://leeparang10.tistory.com/31
