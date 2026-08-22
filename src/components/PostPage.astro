@@ -18,11 +18,11 @@ const interval = 50;
 
 <div class="home-sections">
 	<nav class="home-category-filter" aria-label="Post categories">
-		<button class="is-active" type="button" data-home-filter="all">All</button>
-		<button type="button" data-home-filter="career">Career</button>
-		<button type="button" data-home-filter="competitions">Competitions</button>
-		<button type="button" data-home-filter="projects">Projects</button>
-		<button type="button" data-home-filter="notes">Study Notes</button>
+		<button class="is-active" type="button" data-home-filter="all" onclick="document.querySelectorAll('[data-home-section]').forEach((section) => { section.hidden = false; }); document.querySelectorAll('[data-home-filter]').forEach((item) => item.classList.toggle('is-active', item === this));">All</button>
+		<button type="button" data-home-filter="career" onclick="document.querySelectorAll('[data-home-section]').forEach((section) => { section.hidden = section.dataset.homeSection !== 'career'; }); document.querySelectorAll('[data-home-filter]').forEach((item) => item.classList.toggle('is-active', item === this));">Career</button>
+		<button type="button" data-home-filter="competitions" onclick="document.querySelectorAll('[data-home-section]').forEach((section) => { section.hidden = section.dataset.homeSection !== 'competitions'; }); document.querySelectorAll('[data-home-filter]').forEach((item) => item.classList.toggle('is-active', item === this));">Competitions</button>
+		<button type="button" data-home-filter="projects" onclick="document.querySelectorAll('[data-home-section]').forEach((section) => { section.hidden = section.dataset.homeSection !== 'projects'; }); document.querySelectorAll('[data-home-filter]').forEach((item) => item.classList.toggle('is-active', item === this));">Projects</button>
+		<button type="button" data-home-filter="notes" onclick="document.querySelectorAll('[data-home-section]').forEach((section) => { section.hidden = section.dataset.homeSection !== 'notes'; }); document.querySelectorAll('[data-home-filter]').forEach((item) => item.classList.toggle('is-active', item === this));">Study Notes</button>
 	</nav>
 	{sections.map((section) => {
 		const sectionPosts = posts.filter(
@@ -55,26 +55,6 @@ const interval = 50;
 		);
 	})}
 </div>
-
-<script is:inline data-swup-reload>
-	(() => {
-		const filterButtons = document.querySelectorAll("[data-home-filter]");
-		const sections = document.querySelectorAll("[data-home-section]");
-
-		filterButtons.forEach((button) => {
-			button.addEventListener("click", () => {
-				const selected = button.getAttribute("data-home-filter");
-				filterButtons.forEach((item) =>
-					item.classList.toggle("is-active", item === button),
-				);
-				sections.forEach((section) => {
-					const category = section.getAttribute("data-home-section");
-					(section as HTMLElement).hidden = selected !== "all" && category !== selected;
-				});
-			});
-		});
-	})();
-</script>
 
 <style>
 	.home-sections { display: grid; gap: 3rem; }
