@@ -21,4 +21,4 @@ PitchLab Pro에서는 사용자가 투수의 이름, 투구폼, 구종, 구속 �
 
 이 프로젝트를 통해 **Flask를 활용한 웹 서비스 개발뿐만 아니라 데이터베이스 설계, 데이터 모델링, 분석 알고리즘 구현과 시각화까지 하나의 서비스 안에서 연결하는 경험**을 할 수 있었다. 특히 내가 좋아하는 야구라는 주제를 단순한 관심에서 끝내지 않고 직접 프로그램으로 구현하면서, 데이터가 실제 스포츠 분석에 어떻게 활용될 수 있는지도 배울 수 있었다. 앞으로는 실제 KBO 선수 데이터를 연동하거나 머신러닝을 이용한 승부 예측, 3D 투구 궤적 시각화 등의 기능을 추가하여 **더 실제 야구 분석에 가까운 플랫폼으로 발전시켜 보고 싶다.**
 
-- [프로젝트 설명서](https://docs.google.com/document/d/1Ad238EBW7SrUaBRmNaGGst3xQpnGzKarYU_lks1PNr8/edit?usp=sharing)
+- [PitchLab Pro - Project Documentation](https://docs.google.com/document/d/1Ad238EBW7SrUaBRmNaGGst3xQpnGzKarYU_lks1PNr8/edit?usp=sharing)
