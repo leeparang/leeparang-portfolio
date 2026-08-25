@@ -19,4 +19,4 @@ role: Developer
 
 앞으로는 현재 만든 Bears Lab에서 **경기 예측의 정확도를 높이고 선수 비교 기능이나 AI를 활용한 분석 기능도 추가**해 더 발전시켜 보고 싶다. 또한 새로운 기술을 배우는 데서 끝나지 않고 직접 여러 프로젝트에 적용해 보면서 개발 경험과 문제 해결 능력을 계속 키워 나가고 싶다.
 
-프로젝트 설명서: https://docs.google.com/document/d/1-vRur7wWrzQi8_Cn8vwwoTzdrk3NrDj4quylCrJJCPI/edit?usp=sharing
+- [프로젝트 설명서](https://docs.google.com/document/d/1-vRur7wWrzQi8_Cn8vwwoTzdrk3NrDj4quylCrJJCPI/edit?usp=sharing)

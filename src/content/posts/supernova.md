@@ -46,4 +46,4 @@ Supernova는 나에게 단순한 채팅 앱 프로젝트가 아니었다.
 Supernova는 그렇게 내가 개발이라는 분야를 단순히 공부하는 것에서 조금 더 나아가, **내가 생각한 것을 직접 만들어보고 싶다는 목표를 가지게 된 시작점 중 하나**로 기억하고 싶다.
 
 
-프로젝트 정리 pdf: https://supernovaleeparang.edgeone.dev/
+- [프로젝트 정리 PDF](https://supernovaleeparang.edgeone.dev/)
