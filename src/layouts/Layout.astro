@@ -505,6 +505,37 @@ window.onresize = () => {
 </script>
 
 <script>
+let scrollMotionObserver: IntersectionObserver | undefined;
+
+const revealOnScroll = () => {
+	document.documentElement.classList.add("scroll-motion-ready");
+	scrollMotionObserver?.disconnect();
+	scrollMotionObserver = new IntersectionObserver((entries, observer) => {
+		entries.forEach((entry) => {
+			if (!entry.isIntersecting) return;
+			entry.target.classList.add("scroll-visible");
+			observer.unobserve(entry.target);
+		});
+	}, { threshold: 0.1, rootMargin: "0px 0px -6%" });
+
+	document.querySelectorAll<HTMLElement>(".onload-animation").forEach((item) => {
+		item.classList.remove("scroll-visible");
+		scrollMotionObserver?.observe(item);
+	});
+};
+
+if (window.swup) {
+	revealOnScroll();
+	window.swup.hooks.on("page:view", revealOnScroll);
+} else {
+	document.addEventListener("swup:enable", () => {
+		revealOnScroll();
+		window.swup.hooks.on("page:view", revealOnScroll);
+	}, { once: true });
+}
+</script>
+
+<script>
 import PhotoSwipeLightbox from "photoswipe/lightbox"
 import "photoswipe/style.css"
 

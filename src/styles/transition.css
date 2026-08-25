@@ -26,6 +26,20 @@ html.is-animating .transition-swup-fade {
     animation: 480ms cubic-bezier(.2, .75, .2, 1) fade-in-up;
     animation-fill-mode: forwards;
 }
+
+/* Reveal content as it enters the viewport instead of only at page load. */
+html.scroll-motion-ready .onload-animation {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    filter: blur(7px);
+    animation: none;
+    transition: opacity 480ms ease, transform 480ms cubic-bezier(.2, .75, .2, 1), filter 480ms ease;
+}
+html.scroll-motion-ready .onload-animation.scroll-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
 #navbar {
     animation-delay: 0ms
 }
@@ -60,6 +74,12 @@ html.is-animating .transition-swup-fade {
     }
     .onload-animation {
         animation-duration: 1ms;
+    }
+    html.scroll-motion-ready .onload-animation {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
     }
 }
 
