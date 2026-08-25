@@ -1,7 +1,7 @@
 ---
 title: IRIS - AI Study
 published: 2026-08-01
-description: AI 학습 기록
+description: 딥러닝 학습 기록
 tags: [AI, Study]
 category: Notes
 ---
@@ -10,4 +10,6 @@ category: Notes
 
 IRIS에서 진행한 AI 학습 기록입니다.
 
-학습한 개념과 실습 내용, 느낀 점을 이 문서에 계속 추가합니다.
+
+### 딥러닝
+- [Tistory 링크](https://leeparang10.tistory.com/29)
