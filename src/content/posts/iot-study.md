@@ -11,6 +11,6 @@ category: Notes
 IRIS IoT study notes.
 
 ### 아두이노
-- [Tistory 링크 1](https://leeparang10.tistory.com/21)
-- [Tistory 링크 2](https://leeparang10.tistory.com/22)
-- [Tistory 링크 3](https://leeparang10.tistory.com/23)
+- [[IoT - Arduino/IRIS] - 아두이노 1차시 수업 정리 및 실습 정리](https://leeparang10.tistory.com/21)
+- [[IoT - Arduino/IRIS] - 아두이노 2차시 수업 정리 및 실습 정리](https://leeparang10.tistory.com/22)
+- [[IoT - Arduino/IRIS] - 아두이노 3차시 수업 정리 및 실습 정리](https://leeparang10.tistory.com/23)

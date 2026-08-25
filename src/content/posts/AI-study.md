@@ -12,4 +12,4 @@ IRIS에서 진행한 AI 학습 기록입니다.
 
 
 ### 딥러닝
-- [Tistory 링크](https://leeparang10.tistory.com/29)
+- [[AI/딥러닝] - 인공지능 1차시](https://leeparang10.tistory.com/29)

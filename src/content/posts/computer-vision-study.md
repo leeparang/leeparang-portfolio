@@ -10,5 +10,5 @@ category: Notes
 
 컴퓨터 비전 학습 내용을 기록합니다.
 
-- [Tistory 링크 1](https://leeparang10.tistory.com/30)
-- [Tistory 링크 2](https://leeparang10.tistory.com/31)
+- [[IRIS] - 컴퓨터 비전 1차시](https://leeparang10.tistory.com/30)
+- [[IRIS] - 컴퓨터 비전 2차시](https://leeparang10.tistory.com/31)
