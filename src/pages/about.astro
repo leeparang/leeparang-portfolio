@@ -1,7 +1,8 @@
 ---
 
-import { getEntry, render } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
+import { getPostUrlBySlug } from "@utils/url-utils";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -13,6 +14,11 @@ if (!aboutPost) {
 }
 
 const { Content } = await render(aboutPost);
+const affiliations = (await getCollection("posts"))
+	.filter((post) => post.data.category?.toLowerCase() === "career")
+	.sort((a, b) => a.data.published.getTime() - b.data.published.getTime());
+const formatDate = (date: Date) => new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "2-digit" })
+	.format(date).replace(/\. /g, ".").replace(/\.$/, "");
 ---
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
@@ -20,6 +26,39 @@ const { Content } = await render(aboutPost);
             <Markdown class="mt-2">
                 <Content />
             </Markdown>
+            {affiliations.length > 0 && (
+                <section class="affiliation-section">
+                    <h2>Affiliation</h2>
+                    <div class="timeline">
+                        {affiliations.map((post) => (
+                            <a class="timeline-item" href={getPostUrlBySlug(post.slug)}>
+                                <span class="dot"></span>
+                                <div>
+                                    <h3>{post.data.title}</h3>
+                                    <div class="meta">
+                                        {post.data.role && <span class="badge">{post.data.role}</span>}
+                                        <time>{formatDate(post.data.published)} ~ Present</time>
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            )}
         </div>
     </div>
 </MainGridLayout>
+
+<style>
+    .affiliation-section { margin: 3.5rem .5rem .75rem; }
+    .affiliation-section h2, .affiliation-section h3 { color: var(--text-90); letter-spacing: -.055em; }
+    .affiliation-section h2 { margin: 0 0 2.25rem; font-size: clamp(1.8rem, 3.3vw, 2.3rem); }
+    .timeline { position: relative; display: grid; gap: 2.35rem; padding-left: 2.85rem; }
+    .timeline::before { content: ""; position: absolute; top: .65rem; bottom: .65rem; left: .48rem; width: 2px; background: color-mix(in srgb, var(--primary) 24%, transparent); }
+    .timeline-item { position: relative; display: block; color: inherit; text-decoration: none; }
+    .dot { position: absolute; top: .38rem; left: -2.85rem; width: .98rem; height: .98rem; border: 4px solid var(--card-bg); border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 20%, transparent); }
+    .timeline-item h3 { margin: 0; font-size: 1.15rem; }
+    .meta { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-top: .75rem; color: var(--text-50); font-size: .86rem; }
+    .badge { padding: .29rem .72rem; border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent); border-radius: 999px; color: var(--primary); background: color-mix(in srgb, var(--primary) 7%, transparent); font-weight: 700; }
+    @media (max-width: 640px) { .affiliation-section { margin-left: 0; margin-right: 0; }.timeline { padding-left: 2.3rem; }.dot { left: -2.3rem; } }
+</style>

@@ -3,10 +3,5 @@
 선린인터넷고등학교에서 개발과 보안을 공부하고 있습니다.
 
 - 관심 분야: AI, IoT, Cyber Security
-- 활동: IRIS 2nd Member
-- 목표: AI와 보안을 활용하는 개발자
-
-## Career
-
-- Sunrin Internet High School · 2026.03 ~ Present
-- IRIS 2nd Member · 2026.04 ~ Present
+- 소속: IRIS 2nd Member
+- 목표: AI와 보안을 사용하는 개발자
