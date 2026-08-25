@@ -1,27 +1,29 @@
 /* Page transition animations with Swup */
 html.is-changing .transition-swup-fade {
-    @apply transition-all duration-200
+    @apply transition-all duration-300
 }
 html.is-animating .transition-swup-fade {
-    @apply opacity-0 translate-y-4
+    @apply opacity-0 translate-y-4 blur-sm
 }
 
 /* Fade-in animations for components */
 @keyframes fade-in-up {
     0% {
-        transform: translateY(2rem);
+        transform: translateY(1.25rem);
         opacity: 0;
+        filter: blur(7px);
     }
     100% {
         transform: translateY(0);
         opacity: 1;
+        filter: blur(0);
     }
 }
 
 /* Main components */
 .onload-animation {
     opacity: 0;
-    animation: 300ms fade-in-up;
+    animation: 480ms cubic-bezier(.2, .75, .2, 1) fade-in-up;
     animation-fill-mode: forwards;
 }
 #navbar {
@@ -50,4 +52,14 @@ html.is-animating .transition-swup-fade {
 #post-container :nth-child(4) { animation-delay: calc(var(--content-delay) + 175ms) }
 #post-container :nth-child(5) { animation-delay: calc(var(--content-delay) + 250ms) }
 #post-container :nth-child(6) { animation-delay: calc(var(--content-delay) + 325ms) }
+
+@media (prefers-reduced-motion: reduce) {
+    html.is-animating .transition-swup-fade {
+        transform: none;
+        filter: none;
+    }
+    .onload-animation {
+        animation-duration: 1ms;
+    }
+}
 
