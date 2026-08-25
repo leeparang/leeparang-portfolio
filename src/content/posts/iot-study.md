@@ -11,6 +11,6 @@ category: Notes
 IRIS IoT study notes.
 
 ### 아두이노
-https://leeparang10.tistory.com/21
-https://leeparang10.tistory.com/22
-https://leeparang10.tistory.com/23
+- [Tistory 링크 1](https://leeparang10.tistory.com/21)
+- [Tistory 링크 2](https://leeparang10.tistory.com/22)
+- [Tistory 링크 3](https://leeparang10.tistory.com/23)

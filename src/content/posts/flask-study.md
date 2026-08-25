@@ -10,5 +10,5 @@ category: Notes
 
 Flask 학습 내용을 기록합니다.
 
-https://leeparang10.tistory.com/1
-https://leeparang10.tistory.com/2
+- [Tistory 링크 1](https://leeparang10.tistory.com/1)
+- [Tistory 링크 2](https://leeparang10.tistory.com/2)

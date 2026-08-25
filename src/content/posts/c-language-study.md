@@ -10,8 +10,8 @@ category: Notes
 
 C 언어 학습 내용을 기록합니다.
 
-https://leeparang10.tistory.com/13
-https://leeparang10.tistory.com/14
-https://leeparang10.tistory.com/17
-https://leeparang10.tistory.com/18
-https://leeparang10.tistory.com/19
+- [Tistory 링크 1](https://leeparang10.tistory.com/13)
+- [Tistory 링크 2](https://leeparang10.tistory.com/14)
+- [Tistory 링크 3](https://leeparang10.tistory.com/17)
+- [Tistory 링크 4](https://leeparang10.tistory.com/18)
+- [Tistory 링크 5](https://leeparang10.tistory.com/19)
