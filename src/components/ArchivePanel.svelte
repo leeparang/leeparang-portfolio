@@ -178,11 +178,11 @@
   .view-switch button { border: 0; border-radius: 999px; padding: .38rem .74rem; color: var(--text-50); background: transparent; font: inherit; font-size: .75rem; font-weight: 800; cursor: pointer; transition: .2s ease; }
   .view-switch button.is-active { color: white; background: var(--primary); box-shadow: 0 .25rem .8rem color-mix(in srgb, var(--primary) 27%, transparent); }
   .archive-flow { position: relative; display: grid; gap: 1.25rem; padding: .5rem 0 1rem; isolation: isolate; }
-  .connector-layer { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .connector-layer { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .connector { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; vector-effect: non-scaling-stroke; transition: opacity .18s ease, stroke-dashoffset 1.15s cubic-bezier(.22, .8, .18, 1); }
   .connector.is-visible { opacity: 1; stroke-dashoffset: 0; }
-  .connector-sleeve { stroke: #62c9d2; stroke-width: 9px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 20%, transparent)); }
-  .connector-core { stroke: #efffff; stroke-width: 2px; }
+  .connector-sleeve { stroke: #9ddde3; stroke-width: 6px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 14%, transparent)); }
+  .connector-core { stroke: #3caeba; stroke-width: 1.35px; }
   .pin-ends { opacity: 0; transition: opacity .15s ease .95s; }
   .pin-ends.is-visible { opacity: 1; }
   .pin-body { fill: #29444b; stroke: #73d3db; stroke-width: 2px; }
