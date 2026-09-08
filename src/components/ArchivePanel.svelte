@@ -9,6 +9,9 @@
   type ViewMode = "flow" | "list";
 
   let viewMode: ViewMode = "flow";
+  let connectorPaths: string[] = [];
+  let flowSize = { width: 100, height: 100 };
+  let visibleConnectorIndex = -1;
   const oldestFirst = (a: Post, b: Post) => a.data.published.getTime() - b.data.published.getTime();
   $: studyPosts = sortedPosts
     .filter((post) => post.data.category?.toLowerCase() === "notes")
@@ -27,6 +30,76 @@
     if (mode === viewMode) return;
     viewMode = mode;
   }
+  function connectFlow(node: HTMLElement) {
+    let frame = 0;
+    let observer: IntersectionObserver | undefined;
+    let revealedIndex = -1;
+    let revealTarget = -1;
+    let revealing = false;
+
+    const updatePaths = () => {
+      frame = 0;
+      const flowRect = node.getBoundingClientRect();
+      flowSize = { width: Math.max(1, flowRect.width), height: Math.max(1, flowRect.height) };
+      const cards = Array.from(node.querySelectorAll<HTMLElement>(".flow-card"));
+      connectorPaths = cards.slice(0, -1).map((card, index) => {
+        const nextCard = cards[index + 1];
+        const current = card.getBoundingClientRect();
+        const next = nextCard.getBoundingClientRect();
+        const currentLeft = index % 2 === 0;
+        const nextLeft = !currentLeft;
+        const startX = (currentLeft ? current.right - 4 : current.left + 4) - flowRect.left;
+        const startY = current.top + current.height * .6 - flowRect.top;
+        const endX = (nextLeft ? next.right - 4 : next.left + 4) - flowRect.left;
+        const endY = next.top + next.height * .4 - flowRect.top;
+        const curveX = (startX + endX) / 2 + (currentLeft ? 72 : -72);
+        const curveY = (startY + endY) / 2;
+        return "M " + startX.toFixed(1) + " " + startY.toFixed(1) + " Q " + curveX.toFixed(1) + " " + curveY.toFixed(1) + " " + endX.toFixed(1) + " " + endY.toFixed(1);
+      });
+    };
+    const scheduleUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(updatePaths);
+    };
+    const runRevealQueue = async () => {
+      if (revealing) return;
+      revealing = true;
+      const items = Array.from(node.querySelectorAll<HTMLElement>(".flow-item"));
+      while (revealedIndex < revealTarget) {
+        revealedIndex += 1;
+        items[revealedIndex]?.classList.add("is-revealed");
+        if (revealedIndex > 0) visibleConnectorIndex = revealedIndex - 1;
+        scheduleUpdate();
+        await new Promise((resolve) => window.setTimeout(resolve, 220));
+      }
+      revealing = false;
+    };
+    const requestReveal = (index: number) => {
+      revealTarget = Math.max(revealTarget, index);
+      void runRevealQueue();
+    };
+
+    scheduleUpdate();
+    const items = Array.from(node.querySelectorAll<HTMLElement>(".flow-item"));
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        requestReveal(items.indexOf(entry.target as HTMLElement));
+        observer?.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -8%" });
+    items.forEach((item) => observer?.observe(item));
+    const resizeObserver = new ResizeObserver(scheduleUpdate);
+    resizeObserver.observe(node);
+    return {
+      destroy() {
+        if (frame) cancelAnimationFrame(frame);
+        observer?.disconnect();
+        resizeObserver.disconnect();
+        connectorPaths = [];
+        visibleConnectorIndex = -1;
+      },
+    };
+  }
 </script>
 
 <div class="archive-shell">
@@ -41,7 +114,13 @@
   {#if studyPosts.length === 0}
     <p class="empty">No study notes yet.</p>
   {:else if viewMode === "flow"}
-    <section class="archive-flow" aria-label="Study archive">
+    <section use:connectFlow class="archive-flow" aria-label="Study archive">
+      <svg class="connector-layer" viewBox={`0 0 ${flowSize.width} ${flowSize.height}`} preserveAspectRatio="none" aria-hidden="true">
+        {#each connectorPaths as path, index}
+          <path class:is-visible={index <= visibleConnectorIndex} class="connector connector-glow" d={path}></path>
+          <path class:is-visible={index <= visibleConnectorIndex} class="connector connector-core" d={path}></path>
+        {/each}
+      </svg>
       {#each studyPosts as post, index}
         <article class:from-left={index % 2 === 0} class:from-right={index % 2 !== 0} class="flow-item">
           <a href={getPostUrlBySlug(post.slug)} class="flow-card">
@@ -81,13 +160,16 @@
   .view-switch button { border: 0; border-radius: 999px; padding: .38rem .74rem; color: var(--text-50); background: transparent; font: inherit; font-size: .75rem; font-weight: 800; cursor: pointer; transition: .2s ease; }
   .view-switch button.is-active { color: white; background: var(--primary); box-shadow: 0 .25rem .8rem color-mix(in srgb, var(--primary) 27%, transparent); }
   .archive-flow { position: relative; display: grid; gap: 1.25rem; padding: .5rem 0 1rem; isolation: isolate; }
+  .connector-layer { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .connector { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; vector-effect: non-scaling-stroke; transition: opacity .16s ease, stroke-dashoffset .5s cubic-bezier(.2, .75, .2, 1); }
+  .connector.is-visible { opacity: 1; stroke-dashoffset: 0; }
+  .connector-glow { stroke: color-mix(in srgb, var(--primary) 35%, transparent); stroke-width: 7px; filter: drop-shadow(0 0 .75rem color-mix(in srgb, var(--primary) 45%, transparent)); }
+  .connector-core { stroke: color-mix(in srgb, var(--primary) 78%, white); stroke-width: 1.7px; }
   .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 10.5rem; }
-  .flow-item:not(:last-child)::after { content: ""; position: absolute; z-index: -1; top: 53%; width: 45%; height: 9.5rem; border-top: 2px solid color-mix(in srgb, var(--primary) 62%, var(--line-divider)); filter: drop-shadow(0 0 .55rem color-mix(in srgb, var(--primary) 32%, transparent)); pointer-events: none; }
-  .from-left:not(:last-child)::after { right: 9%; border-radius: 0 100% 0 0; transform: rotate(14deg); transform-origin: right top; }
-  .from-right:not(:last-child)::after { left: 9%; border-radius: 100% 0 0 0; transform: rotate(-14deg); transform-origin: left top; }
-  .flow-card { position: relative; display: flex; width: 78%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+  .flow-card { position: relative; display: flex; width: 78%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 0; filter: blur(6px); transform: translateY(1rem); transition: opacity .42s ease, filter .42s ease, transform .42s cubic-bezier(.2, .75, .2, 1), border-color .22s ease, box-shadow .22s ease; }
   .from-left .flow-card { grid-column: 1; justify-self: center; text-align: left; border-right: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
   .from-right .flow-card { grid-column: 2; justify-self: center; text-align: right; border-left: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
+  .flow-item.is-revealed .flow-card { opacity: 1; filter: blur(0); transform: translateY(0); }
   .flow-card:hover { border-color: color-mix(in srgb, var(--primary) 65%, var(--line-divider)); box-shadow: 0 1rem 2.2rem color-mix(in srgb, var(--primary) 14%, transparent); transform: translateY(-3px); }
   .flow-card time { color: var(--text-50); font-size: .73rem; font-weight: 800; }
   .flow-card h2 { display: -webkit-box; margin: .35rem 0 0; overflow: hidden; color: var(--text-90); font-size: clamp(1rem, 2vw, 1.17rem); font-weight: 850; letter-spacing: -.035em; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
@@ -104,16 +186,9 @@
   .list-title { overflow: hidden; color: var(--text-90); font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
   .list-label { border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); border-radius: 999px; padding: .22rem .55rem; color: var(--primary); background: color-mix(in srgb, var(--primary) 6%, transparent); font-size: .72rem; font-weight: 800; }
   .empty { padding: 1rem 0; color: var(--text-50); }
-  @supports (animation-timeline: view()) {
-    .flow-card { opacity: 0; filter: blur(6px); transform: translateY(1rem); animation: archive-reveal linear both; animation-timeline: view(); animation-range: entry 8% cover 28%; }
-    .flow-item:not(:last-child)::after { opacity: 0; animation: connector-reveal linear both; animation-timeline: view(); animation-range: entry 10% cover 34%; }
-    .flow-card:hover { transform: translateY(-3px); }
-  }
-  @keyframes archive-reveal { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
-  @keyframes connector-reveal { to { opacity: 1; } }
   @media (max-width: 640px) {
     .flow-item { grid-template-columns: 1fr; min-height: auto; }
-    .flow-item:not(:last-child)::after { display: none; }
+    .connector-layer { display: none; }
     .flow-card, .from-left .flow-card, .from-right .flow-card { grid-column: 1; justify-self: stretch; width: auto; text-align: left; border-left: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); border-right: 1px solid var(--line-divider); }
     .year-group { grid-template-columns: 1fr; gap: .45rem; padding-left: 1rem; }
     .year-group h2 { position: static; }
@@ -121,5 +196,5 @@
     .list-row { grid-template-columns: 3.9rem minmax(0, 1fr); gap: .7rem; }
     .list-label { grid-column: 2; justify-self: start; margin-top: -.7rem; }
   }
-  @media (prefers-reduced-motion: reduce) { .flow-card, .flow-item:not(:last-child)::after { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .flow-card { opacity: 1; filter: none; transform: none; transition: none; } }
 </style>
