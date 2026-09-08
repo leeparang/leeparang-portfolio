@@ -6,82 +6,113 @@
     slug: string;
     data: { title: string; tags: string[]; category?: string | null; role?: string; published: Date; };
   }
+  type ViewMode = "flow" | "list";
 
-  const isCategory = (name: string) => (post: Post) => post.data.category?.toLowerCase() === name;
+  let viewMode: ViewMode = "flow";
   const oldestFirst = (a: Post, b: Post) => a.data.published.getTime() - b.data.published.getTime();
-  $: competitions = sortedPosts.filter(isCategory("competitions")).sort(oldestFirst);
-  $: projects = sortedPosts.filter(isCategory("projects")).sort(oldestFirst);
-  $: notes = sortedPosts.filter(isCategory("notes")).sort(oldestFirst);
-  const formatDate = (date: Date) => new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "2-digit" })
-    .format(date).replace(/\. /g, ".").replace(/\.$/, "");
+  $: studyPosts = sortedPosts
+    .filter((post) => post.data.category?.toLowerCase() === "notes")
+    .sort(oldestFirst);
+  $: yearGroups = studyPosts.reduce<{ year: number; posts: Post[] }[]>((groups, post) => {
+    const year = post.data.published.getFullYear();
+    const current = groups.find((group) => group.year === year);
+    if (current) current.posts.push(post);
+    else groups.push({ year, posts: [post] });
+    return groups;
+  }, []);
+  const formatFlowDate = (date: Date) => new Intl.DateTimeFormat("en", { month: "short", day: "2-digit" }).format(date);
+  const formatListDate = (date: Date) => new Intl.DateTimeFormat("en", { month: "2-digit", day: "2-digit" }).format(date);
 </script>
 
-<div class="archive-panel">
-  <section class="archive-section">
-    <h2>Competitions</h2>
-    <div class="project-list">
-      {#each competitions as post}
-        <a class="project-card" href={getPostUrlBySlug(post.slug)}>
-          <h3>{post.data.title}</h3>
-          <div class="meta">
-            {#if post.data.role}<span class="badge">{post.data.role}</span>{/if}
-            <time>{formatDate(post.data.published)}</time>
-          </div>
-        </a>
-      {:else}
-        <p class="empty">No competition records yet.</p>
-      {/each}
+<div class="archive-shell">
+  <header class="archive-summary">
+    <div><span>Archive</span><strong>{studyPosts.length}</strong></div>
+    <div class="view-switch" aria-label="Archive view">
+      <button type="button" class:is-active={viewMode === "flow"} on:click={() => viewMode = "flow"}>Flow</button>
+      <button type="button" class:is-active={viewMode === "list"} on:click={() => viewMode = "list"}>List</button>
     </div>
-  </section>
+  </header>
 
-  <section class="archive-section">
-    <h2>Projects</h2>
-    <div class="project-list">
-      {#each projects as post}
-        <a class="project-card" href={getPostUrlBySlug(post.slug)}>
-          <h3>{post.data.title}</h3>
-          <div class="meta">
-            {#if post.data.role}<span class="badge">{post.data.role}</span>{/if}
-            <time>{formatDate(post.data.published)}</time>
-          </div>
-        </a>
-      {:else}
-        <p class="empty">No project records yet.</p>
-      {/each}
-    </div>
-  </section>
-
-  {#if notes.length > 0}
-    <section class="archive-section">
-      <h2>Study Notes</h2>
-      <div class="project-list">
-        {#each notes as post}
-          <a class="project-card" href={getPostUrlBySlug(post.slug)}>
-            <h3>{post.data.title}</h3>
-            <div class="meta">
-              {#if post.data.role}<span class="badge">{post.data.role}</span>{/if}
-              <time>{formatDate(post.data.published)}</time>
-            </div>
+  {#if studyPosts.length === 0}
+    <p class="empty">No study notes yet.</p>
+  {:else if viewMode === "flow"}
+    <section class="archive-flow" aria-label="Study archive">
+      {#each studyPosts as post, index}
+        <article class:from-left={index % 2 === 0} class:from-right={index % 2 !== 0} class="flow-item">
+          <div class="flow-marker"><span></span></div>
+          <a href={getPostUrlBySlug(post.slug)} class="flow-card">
+            <time>{formatFlowDate(post.data.published)}</time>
+            <h2>{post.data.title}</h2>
+            <span class="flow-label">Study</span>
           </a>
-        {/each}
-      </div>
+        </article>
+      {/each}
+    </section>
+  {:else}
+    <section class="archive-list" aria-label="Study archive list">
+      {#each yearGroups as group}
+        <section class="year-group">
+          <h2>{group.year}</h2>
+          <div class="year-items">
+            {#each group.posts as post}
+              <a href={getPostUrlBySlug(post.slug)} class="list-row">
+                <time>{formatListDate(post.data.published)}</time>
+                <span class="list-title">{post.data.title}</span>
+                <span class="list-label">Study</span>
+              </a>
+            {/each}
+          </div>
+        </section>
+      {/each}
     </section>
   {/if}
 </div>
 
 <style>
-  .archive-panel { padding: clamp(1.7rem, 5vw, 4rem); background: var(--card-bg); border-radius: var(--radius-large); }
-  .archive-section + .archive-section { margin-top: 4.7rem; }
-  h2, h3, p { margin: 0; }
-  h2, h3 { color: var(--text-90); letter-spacing: -.055em; }
-  h2 { margin-bottom: 2.4rem; font-size: clamp(1.8rem, 3.3vw, 2.3rem); }
-  h3 { font-size: 1.15rem; }
-  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-top: .75rem; color: var(--text-50); font-size: .86rem; }
-  .badge { padding: .29rem .72rem; border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent); border-radius: 999px; color: var(--primary); background: color-mix(in srgb, var(--primary) 7%, transparent); font-weight: 700; }
-  .project-list { display: grid; gap: 1.15rem; }
-  .project-card { display: block; padding: 1.75rem 1.35rem; border: 1px solid var(--line-divider); border-radius: 1rem; text-decoration: none; transition: border-color .2s, transform .2s, box-shadow .2s; }
-  .project-card h3 { color: var(--primary); }
-  .project-card:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--line-divider)); transform: translateY(-2px); box-shadow: 0 .7rem 1.5rem color-mix(in srgb, var(--primary) 9%, transparent); }
-  .empty { color: var(--text-50); }
-  @media (max-width: 640px) { .archive-panel { padding: 1.6rem; }.archive-section + .archive-section { margin-top: 3.6rem; }.project-card { padding: 1.35rem 1.1rem; } }
+  .archive-shell { margin: .4rem 0 2.5rem; padding: .7rem clamp(.2rem, 2vw, 1.2rem) 1rem; }
+  .archive-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; color: var(--text-50); font-size: .83rem; font-weight: 800; }
+  .archive-summary > div:first-child { display: flex; align-items: baseline; gap: .55rem; }
+  .archive-summary strong { color: var(--primary); font-size: 1.12rem; font-weight: 900; }
+  .view-switch { display: inline-flex; gap: .2rem; padding: .22rem; border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--line-divider)); border-radius: 999px; background: color-mix(in srgb, var(--primary) 4%, var(--card-bg)); }
+  .view-switch button { border: 0; border-radius: 999px; padding: .38rem .74rem; color: var(--text-50); background: transparent; font: inherit; font-size: .75rem; font-weight: 800; cursor: pointer; transition: .2s ease; }
+  .view-switch button.is-active { color: white; background: var(--primary); box-shadow: 0 .25rem .8rem color-mix(in srgb, var(--primary) 27%, transparent); }
+  .archive-flow { position: relative; display: grid; gap: 1.6rem; padding: .5rem 0 1rem; }
+  .archive-flow::before { content: ""; position: absolute; top: .7rem; bottom: .7rem; left: 50%; width: 2px; background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--primary) 45%, transparent) 6%, color-mix(in srgb, var(--primary) 32%, transparent) 94%, transparent); transform: translateX(-50%); }
+  .flow-item { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 4.5rem minmax(0, 1fr); align-items: center; min-height: 7.5rem; }
+  .flow-marker { grid-column: 2; grid-row: 1; z-index: 2; display: grid; place-items: center; }
+  .flow-marker span { width: .82rem; height: .82rem; border: 4px solid var(--card-bg); border-radius: 999px; background: var(--primary); box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 35%, transparent), 0 0 1rem color-mix(in srgb, var(--primary) 25%, transparent); }
+  .flow-card { position: relative; display: flex; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+  .flow-card::after { content: ""; position: absolute; top: 50%; width: 2.3rem; height: 1px; background: color-mix(in srgb, var(--primary) 50%, var(--line-divider)); }
+  .from-left .flow-card { grid-column: 1; grid-row: 1; text-align: right; }
+  .from-left .flow-card::after { right: -2.3rem; }
+  .from-right .flow-card { grid-column: 3; grid-row: 1; }
+  .from-right .flow-card::after { left: -2.3rem; }
+  .flow-card:hover { border-color: color-mix(in srgb, var(--primary) 65%, var(--line-divider)); box-shadow: 0 1rem 2.2rem color-mix(in srgb, var(--primary) 14%, transparent); transform: translateY(-3px); }
+  .flow-card time { color: var(--text-50); font-size: .73rem; font-weight: 800; }
+  .flow-card h2 { display: -webkit-box; margin: .35rem 0 0; overflow: hidden; color: var(--text-90); font-size: clamp(1rem, 2vw, 1.17rem); font-weight: 850; letter-spacing: -.035em; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .flow-label { margin-top: .42rem; color: var(--primary); font-size: .72rem; font-weight: 850; }
+  .archive-list { display: grid; gap: 1.7rem; }
+  .year-group { display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 1.15rem; }
+  .year-group h2 { position: sticky; top: 5.5rem; align-self: start; margin: 0; color: var(--text-90); font-size: clamp(1.35rem, 3vw, 1.85rem); font-weight: 900; letter-spacing: -.05em; }
+  .year-items { position: relative; border-top: 1px solid var(--line-divider); }
+  .year-items::before { content: ""; position: absolute; top: 0; bottom: .4rem; left: -1.15rem; width: 1px; background: linear-gradient(to bottom, color-mix(in srgb, var(--primary) 48%, transparent), transparent); }
+  .list-row { position: relative; display: grid; grid-template-columns: 4.6rem minmax(0, 1fr) auto; align-items: center; gap: 1rem; min-height: 4.1rem; border-bottom: 1px solid var(--line-divider); color: inherit; text-decoration: none; transition: background .18s ease, transform .18s ease; }
+  .list-row::before { content: ""; position: absolute; left: -1.36rem; top: 50%; width: .42rem; height: .42rem; border-radius: 999px; background: var(--primary); box-shadow: 0 0 .75rem color-mix(in srgb, var(--primary) 38%, transparent); transform: translateY(-50%); }
+  .list-row:hover { background: color-mix(in srgb, var(--primary) 5%, transparent); transform: translateX(3px); }
+  .list-row time { color: var(--text-50); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; font-weight: 750; }
+  .list-title { overflow: hidden; color: var(--text-90); font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+  .list-label { border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); border-radius: 999px; padding: .22rem .55rem; color: var(--primary); background: color-mix(in srgb, var(--primary) 6%, transparent); font-size: .72rem; font-weight: 800; }
+  .empty { padding: 1rem 0; color: var(--text-50); }
+  @media (max-width: 640px) {
+    .archive-flow::before { left: .43rem; transform: none; }
+    .flow-item { grid-template-columns: 1.7rem minmax(0, 1fr); min-height: auto; }
+    .flow-marker { grid-column: 1; }
+    .flow-card, .from-left .flow-card, .from-right .flow-card { grid-column: 2; grid-row: 1; text-align: left; }
+    .flow-card::after { display: none; }
+    .year-group { grid-template-columns: 1fr; gap: .45rem; padding-left: 1rem; }
+    .year-group h2 { position: static; }
+    .year-items::before { left: -.78rem; }
+    .list-row { grid-template-columns: 3.9rem minmax(0, 1fr); gap: .7rem; }
+    .list-label { grid-column: 2; justify-self: start; margin-top: -.7rem; }
+  }
 </style>
