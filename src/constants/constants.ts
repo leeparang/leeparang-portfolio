@@ -7,7 +7,9 @@ export const DEFAULT_THEME = AUTO_MODE;
 
 // Banner height unit: vh
 export const BANNER_HEIGHT = 35;
-export const BANNER_HEIGHT_EXTEND = 30;
+// Keep the home banner immersive, but leave the first archive cards visible
+// in the initial viewport rather than looking like an unfinished page.
+export const BANNER_HEIGHT_EXTEND = 18;
 export const BANNER_HEIGHT_HOME = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
 
 // The height the main panel overlaps the banner, unit: rem
