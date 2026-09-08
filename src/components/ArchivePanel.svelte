@@ -126,8 +126,18 @@
   {:else if viewMode === "flow"}
     <section use:connectFlow class="archive-flow" aria-label="Study archive">
       <svg class="connector-layer" viewBox={`0 0 ${flowSize.width} ${flowSize.height}`} preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <marker id="jumper-pin-start" viewBox="0 0 12 12" refX="2" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+            <rect x="0" y="2.2" width="8" height="7.6" rx="1.5" fill="#eaf7f8" stroke="#4db7c2" stroke-width="1.2"></rect>
+            <rect x="7.5" y="4.1" width="4.5" height="3.8" rx=".8" fill="#f5c86a"></rect>
+          </marker>
+          <marker id="jumper-pin-end" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto" markerUnits="userSpaceOnUse">
+            <rect x="4" y="2.2" width="8" height="7.6" rx="1.5" fill="#eaf7f8" stroke="#4db7c2" stroke-width="1.2"></rect>
+            <rect x="0" y="4.1" width="4.5" height="3.8" rx=".8" fill="#f5c86a"></rect>
+          </marker>
+        </defs>
         {#each connectorPaths as path, index}
-          <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-glow" d={path}></path>
+          <path pathLength="1" marker-start="url(#jumper-pin-start)" marker-end="url(#jumper-pin-end)" class:is-visible={index <= visibleConnectorIndex} class="connector connector-sleeve" d={path}></path>
           <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-core" d={path}></path>
         {/each}
       </svg>
@@ -173,8 +183,8 @@
   .connector-layer { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .connector { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; vector-effect: non-scaling-stroke; transition: opacity .18s ease, stroke-dashoffset 1.15s cubic-bezier(.22, .8, .18, 1); }
   .connector.is-visible { opacity: 1; stroke-dashoffset: 0; }
-  .connector-glow { stroke: color-mix(in srgb, var(--primary) 35%, transparent); stroke-width: 7px; filter: drop-shadow(0 0 .75rem color-mix(in srgb, var(--primary) 45%, transparent)); }
-  .connector-core { stroke: color-mix(in srgb, var(--primary) 78%, white); stroke-width: 1.7px; }
+  .connector-sleeve { stroke: #9ddde3; stroke-width: 6px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 14%, transparent)); }
+  .connector-core { stroke: #3caeba; stroke-width: 1.35px; }
   .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 9.5rem; }
   .flow-card { position: relative; display: flex; width: 58%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 1; filter: none; transform: translateY(0); transition: border-color .22s ease, box-shadow .22s ease; }
   .from-left .flow-card { grid-column: 1; justify-self: start; margin-left: 7%; text-align: left; border-right: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
