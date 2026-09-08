@@ -190,10 +190,11 @@
   .connector.is-visible { opacity: 1; stroke-dashoffset: 0; }
   .connector-sleeve { stroke: #8bd7df; stroke-width: 8px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 14%, transparent)); }
   .connector-core { stroke: #efffff; stroke-width: 1.8px; }
-  .pin-ends { opacity: 0; transition: opacity .15s ease .95s; }
+  .pin-ends { opacity: 0; transition: opacity .18s ease .72s; }
   .pin-ends.is-visible { opacity: 1; }
   .pin-body { fill: #252c30; stroke: #101518; stroke-width: 1.5px; }
-  .pin-metal { stroke: #d6a84b; stroke-width: 3.2px; stroke-linecap: round; filter: drop-shadow(0 0 .18rem #f4d690); }
+  .pin-metal { stroke: #d6a84b; stroke-width: 3.2px; stroke-linecap: round; stroke-dasharray: 26; stroke-dashoffset: 26; filter: drop-shadow(0 0 .18rem #f4d690); transition: stroke-dashoffset .38s cubic-bezier(.2, .75, .2, 1) .78s; }
+  .pin-ends.is-visible .pin-metal { stroke-dashoffset: 0; }
   .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 9.5rem; }
   .flow-card { position: relative; display: flex; width: 58%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 1; filter: none; transform: translateY(0); transition: border-color .22s ease, box-shadow .22s ease; }
   .from-left .flow-card { grid-column: 1; justify-self: start; margin-left: 7%; text-align: left; border-right: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
