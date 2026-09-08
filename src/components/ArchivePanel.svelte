@@ -104,6 +104,13 @@
   .list-title { overflow: hidden; color: var(--text-90); font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
   .list-label { border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); border-radius: 999px; padding: .22rem .55rem; color: var(--primary); background: color-mix(in srgb, var(--primary) 6%, transparent); font-size: .72rem; font-weight: 800; }
   .empty { padding: 1rem 0; color: var(--text-50); }
+  @supports (animation-timeline: view()) {
+    .flow-card { opacity: 0; filter: blur(6px); transform: translateY(1rem); animation: archive-reveal linear both; animation-timeline: view(); animation-range: entry 8% cover 28%; }
+    .flow-item:not(:last-child)::after { opacity: 0; animation: connector-reveal linear both; animation-timeline: view(); animation-range: entry 10% cover 34%; }
+    .flow-card:hover { transform: translateY(-3px); }
+  }
+  @keyframes archive-reveal { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
+  @keyframes connector-reveal { to { opacity: 1; } }
   @media (max-width: 640px) {
     .flow-item { grid-template-columns: 1fr; min-height: auto; }
     .flow-item:not(:last-child)::after { display: none; }
@@ -114,4 +121,5 @@
     .list-row { grid-template-columns: 3.9rem minmax(0, 1fr); gap: .7rem; }
     .list-label { grid-column: 2; justify-self: start; margin-top: -.7rem; }
   }
+  @media (prefers-reduced-motion: reduce) { .flow-card, .flow-item:not(:last-child)::after { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; } }
 </style>
