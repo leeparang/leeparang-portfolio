@@ -133,15 +133,15 @@
           <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-core" d={connector.d}></path>
           <g class:is-visible={index <= visibleConnectorIndex} class="pin-ends">
             {#if index % 2 === 0}
-              <rect x={connector.startX - 12} y={connector.startY - 9} width="18" height="18" rx="2" class="pin-body"></rect>
-              <line x1={connector.startX + 4} y1={connector.startY} x2={connector.startX + 23} y2={connector.startY} class="pin-metal"></line>
-              <rect x={connector.endX - 6} y={connector.endY - 9} width="18" height="18" rx="2" class="pin-body"></rect>
-              <line x1={connector.endX - 4} y1={connector.endY} x2={connector.endX - 23} y2={connector.endY} class="pin-metal"></line>
+              <rect x={connector.startX - 4} y={connector.startY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <line x1={connector.startX - 2} y1={connector.startY} x2={connector.startX - 23} y2={connector.startY} class="pin-metal"></line>
+              <rect x={connector.endX - 8} y={connector.endY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <line x1={connector.endX + 2} y1={connector.endY} x2={connector.endX + 23} y2={connector.endY} class="pin-metal"></line>
             {:else}
-              <rect x={connector.startX - 6} y={connector.startY - 9} width="18" height="18" rx="2" class="pin-body"></rect>
-              <line x1={connector.startX - 4} y1={connector.startY} x2={connector.startX - 23} y2={connector.startY} class="pin-metal"></line>
-              <rect x={connector.endX - 12} y={connector.endY - 9} width="18" height="18" rx="2" class="pin-body"></rect>
-              <line x1={connector.endX + 4} y1={connector.endY} x2={connector.endX + 23} y2={connector.endY} class="pin-metal"></line>
+              <rect x={connector.startX - 8} y={connector.startY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <line x1={connector.startX + 2} y1={connector.startY} x2={connector.startX + 23} y2={connector.startY} class="pin-metal"></line>
+              <rect x={connector.endX - 4} y={connector.endY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <line x1={connector.endX - 2} y1={connector.endY} x2={connector.endX - 23} y2={connector.endY} class="pin-metal"></line>
             {/if}
           </g>
         {/each}
@@ -193,7 +193,7 @@
   .pin-ends { opacity: 0; transition: opacity .15s ease .95s; }
   .pin-ends.is-visible { opacity: 1; }
   .pin-body { fill: #252c30; stroke: #101518; stroke-width: 1.5px; }
-  .pin-metal { stroke: #b8c4c7; stroke-width: 2.6px; stroke-linecap: round; }
+  .pin-metal { stroke: #d6a84b; stroke-width: 3.2px; stroke-linecap: round; filter: drop-shadow(0 0 .18rem #f4d690); }
   .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 9.5rem; }
   .flow-card { position: relative; display: flex; width: 58%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 1; filter: none; transform: translateY(0); transition: border-color .22s ease, box-shadow .22s ease; }
   .from-left .flow-card { grid-column: 1; justify-self: start; margin-left: 7%; text-align: left; border-right: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
