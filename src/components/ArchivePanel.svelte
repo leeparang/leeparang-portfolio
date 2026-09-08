@@ -85,9 +85,9 @@
     };
 
     const items = Array.from(node.querySelectorAll<HTMLElement>(".flow-item"));
-    // Never leave the archive empty while the observer is waiting to run.
-    // The first card is visible at page entry; later cards are revealed while
-    // scrolling, and a timeout is only a safe fallback for unusual browsers.
+    // The first card is visible at page entry. Each following connector waits
+    // for its destination card to reach the viewport, so the path follows the
+    // reader instead of completing ahead of the scroll.
     requestReveal(0);
     scheduleUpdate();
     observer = new IntersectionObserver((entries) => {
@@ -96,9 +96,8 @@
         requestReveal(items.indexOf(entry.target as HTMLElement));
         observer?.unobserve(entry.target);
       });
-    }, { threshold: 0.08, rootMargin: "0px 0px -8%" });
+    }, { threshold: 0.12, rootMargin: "0px 0px -16%" });
     items.forEach((item) => observer?.observe(item));
-    window.setTimeout(() => requestReveal(items.length - 1), 1400);
     const resizeObserver = new ResizeObserver(scheduleUpdate);
     resizeObserver.observe(node);
     return {
