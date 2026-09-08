@@ -133,14 +133,14 @@
           <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-core" d={connector.d}></path>
           <g class:is-visible={index <= visibleConnectorIndex} class="pin-ends">
             {#if index % 2 === 0}
-              <rect x={connector.startX - 4} y={connector.startY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <rect x={connector.startX - 3} y={connector.startY - 6} width="28" height="12" rx="2" class="pin-body"></rect>
               <line x1={connector.startX - 2} y1={connector.startY} x2={connector.startX - 23} y2={connector.startY} class="pin-metal"></line>
-              <rect x={connector.endX - 8} y={connector.endY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <rect x={connector.endX - 25} y={connector.endY - 6} width="28" height="12" rx="2" class="pin-body"></rect>
               <line x1={connector.endX + 2} y1={connector.endY} x2={connector.endX + 23} y2={connector.endY} class="pin-metal"></line>
             {:else}
-              <rect x={connector.startX - 8} y={connector.startY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <rect x={connector.startX - 25} y={connector.startY - 6} width="28" height="12" rx="2" class="pin-body"></rect>
               <line x1={connector.startX + 2} y1={connector.startY} x2={connector.startX + 23} y2={connector.startY} class="pin-metal"></line>
-              <rect x={connector.endX - 4} y={connector.endY - 15} width="12" height="30" rx="2" class="pin-body"></rect>
+              <rect x={connector.endX - 3} y={connector.endY - 6} width="28" height="12" rx="2" class="pin-body"></rect>
               <line x1={connector.endX - 2} y1={connector.endY} x2={connector.endX - 23} y2={connector.endY} class="pin-metal"></line>
             {/if}
           </g>
