@@ -128,8 +128,8 @@
     <section use:connectFlow class="archive-flow" aria-label="Study archive">
       <svg class="connector-layer" viewBox={`0 0 ${flowSize.width} ${flowSize.height}`} preserveAspectRatio="none" aria-hidden="true">
         {#each connectorPaths as path, index}
-          <path class:is-visible={index <= visibleConnectorIndex} class="connector connector-glow" d={path}></path>
-          <path class:is-visible={index <= visibleConnectorIndex} class="connector connector-core" d={path}></path>
+          <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-glow" d={path}></path>
+          <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-core" d={path}></path>
         {/each}
       </svg>
       {#each studyPosts as post, index}
@@ -172,7 +172,7 @@
   .view-switch button.is-active { color: white; background: var(--primary); box-shadow: 0 .25rem .8rem color-mix(in srgb, var(--primary) 27%, transparent); }
   .archive-flow { position: relative; display: grid; gap: 1.25rem; padding: .5rem 0 1rem; isolation: isolate; }
   .connector-layer { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-  .connector { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; vector-effect: non-scaling-stroke; transition: opacity .16s ease, stroke-dashoffset .5s cubic-bezier(.2, .75, .2, 1); }
+  .connector { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; vector-effect: non-scaling-stroke; transition: opacity .18s ease, stroke-dashoffset 1.15s cubic-bezier(.22, .8, .18, 1); }
   .connector.is-visible { opacity: 1; stroke-dashoffset: 0; }
   .connector-glow { stroke: color-mix(in srgb, var(--primary) 35%, transparent); stroke-width: 7px; filter: drop-shadow(0 0 .75rem color-mix(in srgb, var(--primary) 45%, transparent)); }
   .connector-core { stroke: color-mix(in srgb, var(--primary) 78%, white); stroke-width: 1.7px; }
