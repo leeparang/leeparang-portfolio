@@ -132,10 +132,10 @@
           <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-sleeve" d={connector.d}></path>
           <path pathLength="1" class:is-visible={index <= visibleConnectorIndex} class="connector connector-core" d={connector.d}></path>
           <g class:is-visible={index <= visibleConnectorIndex} class="pin-ends">
-            <circle cx={connector.startX} cy={connector.startY} r="11" class="pin-body"></circle>
-            <circle cx={connector.startX} cy={connector.startY} r="4" class="pin-metal"></circle>
-            <circle cx={connector.endX} cy={connector.endY} r="11" class="pin-body"></circle>
-            <circle cx={connector.endX} cy={connector.endY} r="4" class="pin-metal"></circle>
+            <rect x={connector.startX - 10} y={connector.startY - 8} width="20" height="16" rx="2.5" class="pin-body"></rect>
+            <rect x={connector.startX - 5} y={connector.startY - 3} width="10" height="6" rx="1.2" class="pin-metal"></rect>
+            <rect x={connector.endX - 10} y={connector.endY - 8} width="20" height="16" rx="2.5" class="pin-body"></rect>
+            <rect x={connector.endX - 5} y={connector.endY - 3} width="10" height="6" rx="1.2" class="pin-metal"></rect>
           </g>
         {/each}
       </svg>
@@ -181,12 +181,12 @@
   .connector-layer { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .connector { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; vector-effect: non-scaling-stroke; transition: opacity .18s ease, stroke-dashoffset 1.15s cubic-bezier(.22, .8, .18, 1); }
   .connector.is-visible { opacity: 1; stroke-dashoffset: 0; }
-  .connector-sleeve { stroke: #9ddde3; stroke-width: 6px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 14%, transparent)); }
-  .connector-core { stroke: #3caeba; stroke-width: 1.35px; }
+  .connector-sleeve { stroke: #8bd7df; stroke-width: 8px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 14%, transparent)); }
+  .connector-core { stroke: #efffff; stroke-width: 1.8px; }
   .pin-ends { opacity: 0; transition: opacity .15s ease .95s; }
   .pin-ends.is-visible { opacity: 1; }
-  .pin-body { fill: #29444b; stroke: #73d3db; stroke-width: 2px; }
-  .pin-metal { fill: #f2c66d; stroke: #fff3c7; stroke-width: 1.25px; }
+  .pin-body { fill: #f5fcfc; stroke: #3caeba; stroke-width: 2px; }
+  .pin-metal { fill: #5cc3ce; }
   .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 9.5rem; }
   .flow-card { position: relative; display: flex; width: 58%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 1; filter: none; transform: translateY(0); transition: border-color .22s ease, box-shadow .22s ease; }
   .from-left .flow-card { grid-column: 1; justify-self: start; margin-left: 7%; text-align: left; border-right: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
