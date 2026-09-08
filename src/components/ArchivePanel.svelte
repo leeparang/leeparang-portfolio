@@ -52,9 +52,15 @@
         const startY = current.top + current.height * .6 - flowRect.top;
         const endX = (nextLeft ? next.right - 4 : next.left + 4) - flowRect.left;
         const endY = next.top + next.height * .4 - flowRect.top;
-        const curveX = (startX + endX) / 2 + (currentLeft ? 72 : -72);
-        const curveY = (startY + endY) / 2;
-        return "M " + startX.toFixed(1) + " " + startY.toFixed(1) + " Q " + curveX.toFixed(1) + " " + curveY.toFixed(1) + " " + endX.toFixed(1) + " " + endY.toFixed(1);
+        // Keep both ends almost horizontal.  This makes the path read like a
+        // gentle bridge between cards instead of a steep vertical hook.
+        const distance = Math.abs(endX - startX);
+        const direction = endX > startX ? 1 : -1;
+        const handle = Math.max(72, distance * .36) * direction;
+        return "M " + startX.toFixed(1) + " " + startY.toFixed(1)
+          + " C " + (startX + handle).toFixed(1) + " " + startY.toFixed(1)
+          + " " + (endX - handle).toFixed(1) + " " + endY.toFixed(1)
+          + " " + endX.toFixed(1) + " " + endY.toFixed(1);
       });
     };
     const scheduleUpdate = () => {
@@ -78,8 +84,12 @@
       void runRevealQueue();
     };
 
-    scheduleUpdate();
     const items = Array.from(node.querySelectorAll<HTMLElement>(".flow-item"));
+    // Never leave the archive empty while the observer is waiting to run.
+    // The first card is visible at page entry; later cards are revealed while
+    // scrolling, and a timeout is only a safe fallback for unusual browsers.
+    requestReveal(0);
+    scheduleUpdate();
     observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
@@ -88,6 +98,7 @@
       });
     }, { threshold: 0.08, rootMargin: "0px 0px -8%" });
     items.forEach((item) => observer?.observe(item));
+    window.setTimeout(() => requestReveal(items.length - 1), 1400);
     const resizeObserver = new ResizeObserver(scheduleUpdate);
     resizeObserver.observe(node);
     return {
@@ -165,11 +176,12 @@
   .connector.is-visible { opacity: 1; stroke-dashoffset: 0; }
   .connector-glow { stroke: color-mix(in srgb, var(--primary) 35%, transparent); stroke-width: 7px; filter: drop-shadow(0 0 .75rem color-mix(in srgb, var(--primary) 45%, transparent)); }
   .connector-core { stroke: color-mix(in srgb, var(--primary) 78%, white); stroke-width: 1.7px; }
-  .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 10.5rem; }
-  .flow-card { position: relative; display: flex; width: 78%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 0; filter: blur(6px); transform: translateY(1rem); transition: opacity .42s ease, filter .42s ease, transform .42s cubic-bezier(.2, .75, .2, 1), border-color .22s ease, box-shadow .22s ease; }
-  .from-left .flow-card { grid-column: 1; justify-self: center; text-align: left; border-right: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
-  .from-right .flow-card { grid-column: 2; justify-self: center; text-align: right; border-left: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
-  .flow-item.is-revealed .flow-card { opacity: 1; filter: blur(0); transform: translateY(0); }
+  .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 9.5rem; }
+  .flow-card { position: relative; display: flex; width: 58%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 1; filter: none; transform: translateY(0); transition: border-color .22s ease, box-shadow .22s ease; }
+  .from-left .flow-card { grid-column: 1; justify-self: start; margin-left: 7%; text-align: left; border-right: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
+  .from-right .flow-card { grid-column: 2; justify-self: end; margin-right: 7%; text-align: right; border-left: 3px solid color-mix(in srgb, var(--primary) 60%, var(--line-divider)); }
+  .flow-item.is-revealed .flow-card { animation: card-arrival .42s cubic-bezier(.2, .75, .2, 1) both; }
+  @keyframes card-arrival { from { opacity: .15; filter: blur(5px); transform: translateY(1rem); } to { opacity: 1; filter: blur(0); transform: translateY(0); } }
   .flow-card:hover { border-color: color-mix(in srgb, var(--primary) 65%, var(--line-divider)); box-shadow: 0 1rem 2.2rem color-mix(in srgb, var(--primary) 14%, transparent); transform: translateY(-3px); }
   .flow-card time { color: var(--text-50); font-size: .73rem; font-weight: 800; }
   .flow-card h2 { display: -webkit-box; margin: .35rem 0 0; overflow: hidden; color: var(--text-90); font-size: clamp(1rem, 2vw, 1.17rem); font-weight: 850; letter-spacing: -.035em; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
