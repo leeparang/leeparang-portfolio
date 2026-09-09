@@ -48,6 +48,11 @@ const jsonLd = {
 ---
 <MainGridLayout banner={entry.data.image} title={entry.data.title} description={entry.data.description} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
     <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+    <script is:inline slot="head">
+        if (localStorage.getItem('portfolio-study-notes-unlocked') === 'true') {
+            document.documentElement.classList.add('study-notes-unlocked');
+        }
+    </script>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
         <div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ",
             {}
@@ -153,6 +158,7 @@ const jsonLd = {
     (() => {
         const unlockKey = 'portfolio-study-notes-unlocked';
         const unlockNotes = () => {
+            document.documentElement.classList.add('study-notes-unlocked');
             document.querySelectorAll('[data-note-content]').forEach((content) => content.hidden = false);
             document.querySelectorAll('[data-note-lock]').forEach((lock) => lock.hidden = true);
         };
@@ -162,6 +168,8 @@ const jsonLd = {
         // appear to be ignored.
         if (localStorage.getItem(unlockKey) === 'true') unlockNotes();
 
+        if (window.__portfolioNoteLockListener) return;
+        window.__portfolioNoteLockListener = true;
         document.addEventListener('submit', (event) => {
             const form = event.target instanceof Element
                 ? event.target.closest('[data-note-password-form]')
@@ -188,4 +196,6 @@ const jsonLd = {
     .note-lock input:focus { border-color: var(--primary); }
     .note-lock button { padding: .7rem 1rem; border: 0; border-radius: .65rem; background: var(--primary); color: white; font-weight: 700; cursor: pointer; }
     .note-lock span { display: block; min-height: 1.2rem; margin-top: .6rem; color: #d74a4a; font-size: .8rem; }
+    :global(html.study-notes-unlocked [data-note-content][hidden]) { display: block !important; }
+    :global(html.study-notes-unlocked [data-note-lock]) { display: none !important; }
 </style>
