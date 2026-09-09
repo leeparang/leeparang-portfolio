@@ -13,10 +13,10 @@
   let connectorPaths: Connector[] = [];
   let flowSize = { width: 100, height: 100 };
   let visibleConnectorIndex = -1;
-  const oldestFirst = (a: Post, b: Post) => a.data.published.getTime() - b.data.published.getTime();
+  const newestFirst = (a: Post, b: Post) => b.data.published.getTime() - a.data.published.getTime();
   $: studyPosts = sortedPosts
     .filter((post) => post.data.category?.toLowerCase() === "notes")
-    .sort(oldestFirst);
+    .sort(newestFirst);
   $: yearGroups = studyPosts.reduce<{ year: number; posts: Post[] }[]>((groups, post) => {
     const year = post.data.published.getFullYear();
     const current = groups.find((group) => group.year === year);
