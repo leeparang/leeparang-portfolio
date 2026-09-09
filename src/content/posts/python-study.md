@@ -1,6 +1,6 @@
 ---
 title: IRIS - Python Study
-published: 2026-08-01
+published: 2026-06-01
 description: 파이썬 학습 기록
 tags: [Python, Programming]
 category: Notes

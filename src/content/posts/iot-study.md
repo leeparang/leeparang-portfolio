@@ -1,6 +1,6 @@
 ---
 title: IRIS - IoT Study
-published: 2026-08-23
+published: 2026-05-01
 description: IoT study notes
 tags: [IoT, Embedded]
 category: Notes

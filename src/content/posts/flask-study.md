@@ -1,6 +1,6 @@
 ---
 title: Flask Study
-published: 2026-08-01
+published: 2025-09-01
 description: Flask 학습 기록
 tags: [Flask, Web]
 category: Notes

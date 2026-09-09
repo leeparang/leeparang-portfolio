@@ -1,6 +1,6 @@
 ---
 title: IRIS - AI Study
-published: 2026-08-01
+published: 2026-07-01
 description: 딥러닝 학습 기록
 tags: [AI, Study]
 category: Notes
