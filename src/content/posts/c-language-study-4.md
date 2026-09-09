@@ -6,6 +6,34 @@ tags: [C, Programming, IRIS, Study]
 category: Notes
 ---
 
-## Recursive Functions
+#### 1. 재귀 함수
 
-[View the original note on Tistory](https://leeparang10.tistory.com/18)
+함수가 자기 자신을 호출하는 함수
+즉, 함수가 종료될 때 return 값을 자기 자신에게 하는 함수이다.
+
+꼭 필요한 조건
+
+1. 기저 조건: 더 이상 재귀하지 않을 조건
+
+2. 재귀 호출: 자기 자신을 호출
+
+#### 
+
+#### 2. 쓰는 이유?
+
+가독성과 안정성이 올라가고, 코드가 간결해진다. 또한 트리, 분할정복 같은 알고리즘에 적합하다. 하지만 스택 오버플로우가 발생할 수 있어서 반드시 종료조건이 필요하다.
+
+#### 3. 예제
+
+#include 
+
+int hap(int n){
+    if(n 
+            
+
+                    
+
+
+---
+
+[Original post on Tistory](https://leeparang10.tistory.com/18)
