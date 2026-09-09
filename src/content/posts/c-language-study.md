@@ -1,17 +1,11 @@
 ---
-title: IRIS - C Language Study
+title: IRIS - C Language Study · 1차시
 published: 2026-04-01
-description: C 언어 학습 기록
-tags: [C, Programming]
+description: Functions in C
+tags: [C, Programming, IRIS, Study]
 category: Notes
 ---
 
-## C Language Study
+## Functions
 
-C 언어 학습 내용을 기록합니다.
-
-- [[IRIS/C] - 함수](https://leeparang10.tistory.com/13)
-- [[IRIS/C] - 포인터](https://leeparang10.tistory.com/14)
-- [[IRIS/C] - 동적 할당](https://leeparang10.tistory.com/17)
-- [[IRIS/C] - 재귀 함수](https://leeparang10.tistory.com/18)
-- [[IRIS/C] - 구조체](https://leeparang10.tistory.com/19)
+[View the original note on Tistory](https://leeparang10.tistory.com/13)

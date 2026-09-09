@@ -1,15 +1,11 @@
 ---
-title: IRIS - AI Study
+title: IRIS - AI Study · 1차시
 published: 2026-07-01
-description: 딥러닝 학습 기록
-tags: [AI, Study]
+description: Introduction to AI and deep learning
+tags: [AI, Deep Learning, IRIS, Study]
 category: Notes
 ---
 
-## AI Study
+## AI Session 1
 
-IRIS에서 진행한 AI 학습 기록입니다.
-
-
-### 딥러닝
-- [[AI/딥러닝] - 인공지능 1차시](https://leeparang10.tistory.com/29)
+[View the original note on Tistory](https://leeparang10.tistory.com/29)

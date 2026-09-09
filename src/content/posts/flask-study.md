@@ -1,14 +1,11 @@
 ---
-title: Flask Study
+title: Flask Study · 1차시
 published: 2025-09-01
-description: Flask 학습 기록
-tags: [Flask, Web]
+description: Flask basics and HTML rendering
+tags: [Flask, Web, Study]
 category: Notes
 ---
 
-## Flask Study
+## Flask Basics and HTML Rendering
 
-Flask 학습 내용을 기록합니다.
-
-- [[Flask] Flask 시작하기 + HTML 렌더링 하기.](https://leeparang10.tistory.com/1)
-- [[Flask] Jinja2 를 사용한 동적 HTML 띄우기](https://leeparang10.tistory.com/2)
+[View the original note on Tistory](https://leeparang10.tistory.com/1)

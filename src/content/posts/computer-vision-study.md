@@ -1,14 +1,11 @@
 ---
-title: IRIS - Computer Vision Study
+title: IRIS - Computer Vision Study · 1차시
 published: 2026-08-01
-description: 컴퓨터 비전 학습 기록
-tags: [Computer Vision, AI]
+description: Computer vision fundamentals
+tags: [Computer Vision, AI, IRIS, Study]
 category: Notes
 ---
 
-## Computer Vision Study
+## Computer Vision Session 1
 
-컴퓨터 비전 학습 내용을 기록합니다.
-
-- [[IRIS] - 컴퓨터 비전 1차시](https://leeparang10.tistory.com/30)
-- [[IRIS] - 컴퓨터 비전 2차시](https://leeparang10.tistory.com/31)
+[View the original note on Tistory](https://leeparang10.tistory.com/30)

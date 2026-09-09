@@ -1,15 +1,11 @@
 ---
-title: IRIS - Data Analysis Study
+title: IRIS - Data Analysis Study · 1차시
 published: 2026-09-01
-description: Data analysis study record
-tags: [Data Analysis, Study, IRIS]
+description: Data analysis and visualization
+tags: [Data Analysis, Visualization, IRIS, Study]
 category: Notes
 ---
 
-## Data Analysis Study
+## Data Analysis and Visualization
 
-IRIS에서 진행한 데이터 분석 학습 기록입니다.
-
-### 학습 자료
-
-[Data Analysis Study - Tistory](https://leeparang10.tistory.com/32)
+[View the original note on Tistory](https://leeparang10.tistory.com/32)
