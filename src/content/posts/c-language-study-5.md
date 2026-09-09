@@ -57,11 +57,6 @@ s1.age 이런 형식으로 변수에 값을 넣어줍니다.
 
 그리고 구조체에 들어간 값을 출력해 줍니다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/19)

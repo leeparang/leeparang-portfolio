@@ -332,11 +332,6 @@ df.min()
 최솟값 계산
 df['점수'].min()
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/32)

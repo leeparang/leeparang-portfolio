@@ -33,10 +33,6 @@
   }
   function connectFlow(node: HTMLElement) {
     let frame = 0;
-    let observer: IntersectionObserver | undefined;
-    let revealedIndex = -1;
-    let revealTarget = -1;
-    let revealing = false;
 
     const updatePaths = () => {
       frame = 0;
@@ -68,44 +64,33 @@
     const scheduleUpdate = () => {
       if (!frame) frame = requestAnimationFrame(updatePaths);
     };
-    const runRevealQueue = async () => {
-      if (revealing) return;
-      revealing = true;
-      const items = Array.from(node.querySelectorAll<HTMLElement>(".flow-item"));
-      while (revealedIndex < revealTarget) {
-        revealedIndex += 1;
-        items[revealedIndex]?.classList.add("is-revealed");
-        if (revealedIndex > 0) visibleConnectorIndex = revealedIndex - 1;
-        scheduleUpdate();
-        await new Promise((resolve) => window.setTimeout(resolve, 220));
-      }
-      revealing = false;
-    };
-    const requestReveal = (index: number) => {
-      revealTarget = Math.max(revealTarget, index);
-      void runRevealQueue();
-    };
-
     const items = Array.from(node.querySelectorAll<HTMLElement>(".flow-item"));
-    // The first card is visible at page entry. Each following connector waits
-    // for its destination card to reach the viewport, so the path follows the
-    // reader instead of completing ahead of the scroll.
-    requestReveal(0);
-    scheduleUpdate();
-    observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        requestReveal(items.indexOf(entry.target as HTMLElement));
-        observer?.unobserve(entry.target);
+    let scrollFrame = 0;
+    const syncScrollProgress = () => {
+      scrollFrame = 0;
+      const revealLine = window.innerHeight * .82;
+      let lastVisible = 0;
+      items.forEach((item, index) => {
+        if (item.getBoundingClientRect().top <= revealLine) lastVisible = index;
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -16%" });
-    items.forEach((item) => observer?.observe(item));
+      items.forEach((item, index) => item.classList.toggle("is-revealed", index <= lastVisible));
+      visibleConnectorIndex = lastVisible - 1;
+    };
+    const scheduleScrollSync = () => {
+      if (!scrollFrame) scrollFrame = requestAnimationFrame(syncScrollProgress);
+    };
+    // This is reversible: scrolling back upward retracts the next connector
+    // and its card instead of leaving the full route drawn on screen.
+    syncScrollProgress();
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleScrollSync, { passive: true });
     const resizeObserver = new ResizeObserver(scheduleUpdate);
     resizeObserver.observe(node);
     return {
       destroy() {
         if (frame) cancelAnimationFrame(frame);
-        observer?.disconnect();
+        if (scrollFrame) cancelAnimationFrame(scrollFrame);
+        window.removeEventListener("scroll", scheduleScrollSync);
         resizeObserver.disconnect();
         connectorPaths = [];
         visibleConnectorIndex = -1;

@@ -28,11 +28,25 @@ category: Notes
 #include 
 
 int hap(int n){
-    if(n 
-            
+    if(n <= 1){
+        return n;
+    }
+    return n + hap(n-1);
+}
 
-                    
+int main() {
 
+int n = 0;
+scanf("%d",&n);
+printf("%d",hap(n));
+    return 0;
+}
+
+![Study image](/study-assets/c-language-study-4-1.png)
+
+종료 조건 까지 계속 더해준다.
+
+int main()함수에서는 입출력을 담당한다.
 
 ---
 

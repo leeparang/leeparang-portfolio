@@ -107,11 +107,6 @@ plt.show()
 
 상단에 적은 제목이 뜬다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/31)

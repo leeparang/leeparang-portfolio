@@ -80,11 +80,6 @@ void change(int *x) {
 
 따라서 함수 실행이 끝난 후 printf("변경 후: %d\n", a);에서 a의 값이 10으로 출력됩니다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/14)

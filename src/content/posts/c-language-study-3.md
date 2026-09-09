@@ -54,11 +54,6 @@ free(arr);
 
 malloc을 사용해 데이터 크기를 정해주고 있다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/17)

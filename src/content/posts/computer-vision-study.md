@@ -134,11 +134,6 @@ PyTorch 외에도 TensorFlow와 같은 딥러닝 프레임워크가 사용된다
 
 앞으로도 컴퓨터 비전은 자율주행, 의료, 보안, 제조업 등 다양한 분야에서 더욱 활용될 것으로 기대된다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/30)

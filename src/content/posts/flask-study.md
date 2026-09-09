@@ -125,11 +125,6 @@ HTML 화면의 글씨
 
 이상으로 Flask 시작과 Flask를 이용한 HTML 렌더링에 대해 마친다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/1)

@@ -90,11 +90,6 @@ HTML + Jinja2 렌더링
 
 이상으로 Jinja2 + HTML 렌더링에 대해 마칩니다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/2)

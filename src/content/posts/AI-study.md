@@ -165,11 +165,6 @@ Epoch:전체 데이터를 한 번 학습
 
 즉, 앞으로의 AI는 단순히 성능이 높은 것을 넘어, 왜 그런 판단을 했는지 설명할 수 있고 적은 자원으로 효율적으로 작동하는 방향으로 발전할 필요가 있습니다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/29)

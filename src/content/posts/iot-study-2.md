@@ -45,9 +45,29 @@ PULL UP
 
 #### 3. 가변저항
 
-    
-    가변저항 실습.mp4
+가변저항 실습.mp4
 6.46MB
+
+#### 4. 초음파 센서
+
+![Study image](/study-assets/iot-study-2-4.png)
+
+초음파를 보내서 거리를 측정하는 센서이다.
+
+초음파 센서
+아두이노
+
+VCC
+5V
+
+Trig
+디지털~3
+
+Echo
+디지털 2
+
+GND
+GND
 
 ---
 

@@ -58,6 +58,50 @@ Ex. "야구 선수 클래스"
 
 ![Study image](/study-assets/python-study-3-3.png)
 
+#### 속성과 메서드: 객체의 데이터와 행동
+
+![Study image](/study-assets/python-study-3-4.png)
+
+hit()은 객체가 수행할 수 있는 메서드(Method) 로, 객체의 행동이나 기능을 의미한다.
+
+player1 = BaseballPlayer("양의지")를 통해 BaseballPlayer 클래스로부터 player1이라는 객체를 생성하였다.
+
+player1.hit()을 실행하면 hit() 메서드가 호출되어 "안타!"가 출력된다.
+
+#### 객체지향의 핵심 4가지
+
+캡슐화 (Encapsulation)
+
+캡슐화는 객체의 데이터를 외부에서 함부로 접근하지 못하도록 보호하고, 필요한 기능을 통해서만 접근하도록 만드는 것이다.
+
+예를 들어 야구 선수의 연봉 정보를 아무 곳에서나 수정할 수 없게 하고, 정해진 메서드를 통해서만 조회하거나 변경하도록 만들 수 있다.
+
+![Study image](/study-assets/python-study-3-5.png)
+
+상속 (Inheritance)
+
+상속은 기존 클래스의 속성과 메서드를 물려받아 새로운 클래스를 만드는 것이다.
+
+![Study image](/study-assets/python-study-3-6.png)
+
+다형성 (Polymorphism)
+
+다형성은 같은 이름의 메서드가 객체에 따라 다른 방식으로 동작하는 것이다.
+
+예를 들어 투수와 타자 모두 play() 메서드를 사용할 수 있지만 수행하는 행동은 다를 수 있다.
+
+ 
+
+![Study image](/study-assets/python-study-3-7.png)
+
+추상화 (Abstraction)
+
+추상화는 객체의 중요한 특징만 보여주고 복잡한 내부 구현은 숨기는 것이다.
+
+예를 들어 자동차의 운전자는 엔진의 모든 동작 원리를 몰라도 핸들과 페달만으로 운전할 수 있다.
+
+![Study image](/study-assets/python-study-3-8.png)
+
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/27)

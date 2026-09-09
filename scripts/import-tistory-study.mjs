@@ -29,14 +29,27 @@ const decode = (value) => value
   .replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/&lt;/gi, "<")
   .replace(/&gt;/gi, ">").replace(/&quot;/gi, '"').replace(/&#39;/gi, "'");
 const text = (value) => decode(value.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "")).replace(/\n{3,}/g, "\n\n").trim();
+function getArticleBody(html) {
+  const opening = /<div class="tt_article_useless_p_margin[^>]*>/i.exec(html);
+  if (!opening || opening.index === undefined) return null;
+  const start = opening.index + opening[0].length;
+  const divTags = /<\/?div\b[^>]*>/gi;
+  divTags.lastIndex = start;
+  let depth = 1;
+  for (let tag = divTags.exec(html); tag; tag = divTags.exec(html)) {
+    depth += tag[0].startsWith("</") ? -1 : 1;
+    if (depth === 0) return html.slice(start, tag.index);
+  }
+  return null;
+}
 
 await mkdir(imagesDir, { recursive: true });
 for (const [slug, id, title, published, description, tagList] of sessions) {
   const sourceUrl = `https://leeparang10.tistory.com/${id}`;
   const html = await (await fetch(sourceUrl)).text();
-  const match = html.match(/<div class="tt_article_useless_p_margin[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
-  if (!match) throw new Error(`Could not find article body for ${sourceUrl}`);
-  let body = match[1];
+  const articleBody = getArticleBody(html);
+  if (!articleBody) throw new Error(`Could not find article body for ${sourceUrl}`);
+  let body = articleBody;
   // The article wrapper also contains Tistory's reaction/share script in a
   // few themes; it is not part of the learning note.
   body = body.replace(/<script\b[\s\S]*?<\/script>/gi, "");

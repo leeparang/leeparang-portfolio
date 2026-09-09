@@ -75,11 +75,6 @@ int sum(int a, int b)    // sum 함수 정의
 
 위 printf("result = %d입니다.", result); 에서 7의 값이 출력될 것입니다.
 
-            
-
-                    
-
-
 ---
 
 [Original post on Tistory](https://leeparang10.tistory.com/13)
