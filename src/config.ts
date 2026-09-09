@@ -5,7 +5,6 @@ import type {
 	ProfileConfig,
 	SiteConfig,
 } from "./types/config";
-import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
 	title: "Leeparang Archive",
@@ -41,9 +40,9 @@ export const siteConfig: SiteConfig = {
 
 export const navBarConfig: NavBarConfig = {
 	links: [
-		LinkPreset.Home,
-		LinkPreset.Archive,
-		LinkPreset.About,
+		{ name: "Home", url: "/" },
+		{ name: "Archive", url: "/archive/" },
+		{ name: "About", url: "/about/" },
 		{
 			name: "GitHub",
 			url: "https://github.com/leeparang", // Internal links should not include the base path, as it is automatically added
