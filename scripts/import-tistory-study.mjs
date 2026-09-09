@@ -42,6 +42,19 @@ function getArticleBody(html) {
   }
   return null;
 }
+function tableToMarkdown(tableHtml) {
+  const rows = [...tableHtml.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)].map((row) =>
+    [...row[1].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi)].map((cell) =>
+      text(cell[1]).replace(/\|/g, "\\|").replace(/\n+/g, " "),
+    ),
+  ).filter((row) => row.length > 0);
+  if (!rows.length) return "";
+  const columns = Math.max(...rows.map((row) => row.length));
+  const normalize = (row) => Array.from({ length: columns }, (_, index) => row[index] || "");
+  const header = normalize(rows[0]);
+  const body = rows.slice(1).map(normalize);
+  return `\n\n| ${header.join(" | ")} |\n| ${header.map(() => "---").join(" | ")} |\n${body.map((row) => `| ${row.join(" | ")} |`).join("\n")}\n\n`;
+}
 
 await mkdir(imagesDir, { recursive: true });
 for (const [slug, id, title, published, description, tagList] of sessions) {
@@ -53,6 +66,7 @@ for (const [slug, id, title, published, description, tagList] of sessions) {
   // The article wrapper also contains Tistory's reaction/share script in a
   // few themes; it is not part of the learning note.
   body = body.replace(/<script\b[\s\S]*?<\/script>/gi, "");
+  body = body.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (_, tableHtml) => tableToMarkdown(tableHtml));
   // Preserve Tistory's code snippets as Markdown fenced code blocks instead
   // of flattening them into regular prose.
   body = body.replace(/<pre([^>]*)>([\s\S]*?)<\/pre>/gi, (_, attributes, value) => {

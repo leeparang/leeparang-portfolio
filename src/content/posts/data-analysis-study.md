@@ -161,45 +161,17 @@ print(a)
 
 (7) Numpy의 주요 명령어
 
-np.array()
-배열 생성
-np.array([1, 2, 3])
-
-np.arange()
-일정한 간격으로 배열 생성
-np.arange(1, 10) &rarr; 1부터 9까지 생성
-
-np.zeros()
-0으로 채워진 배열 생성
-np.zeros(5) &rarr; 0을 5개 생성
-
-np.ones()
-1로 채워진 배열 생성
-np.ones(5) &rarr; 1을 5개 생성
-
-np.mean()
-평균 계산
-np.mean(data)
-
-np.max()
-최댓값 계산
-np.max(data)
-
-np.min()
-최솟값 계산
-np.min(data)
-
-np.sum()
-전체 합계 계산
-np.sum(data)
-
-np.std()
-표준편차 계산
-np.std(data)
-
-np.reshape()
-배열의 형태 변경
-data.reshape(2, 3) &rarr; 2행 3열로 변경
+| np.array() | 배열 생성 | np.array([1, 2, 3]) |
+| --- | --- | --- |
+| np.arange() | 일정한 간격으로 배열 생성 | np.arange(1, 10) &rarr; 1부터 9까지 생성 |
+| np.zeros() | 0으로 채워진 배열 생성 | np.zeros(5) &rarr; 0을 5개 생성 |
+| np.ones() | 1로 채워진 배열 생성 | np.ones(5) &rarr; 1을 5개 생성 |
+| np.mean() | 평균 계산 | np.mean(data) |
+| np.max() | 최댓값 계산 | np.max(data) |
+| np.min() | 최솟값 계산 | np.min(data) |
+| np.sum() | 전체 합계 계산 | np.sum(data) |
+| np.std() | 표준편차 계산 | np.std(data) |
+| np.reshape() | 배열의 형태 변경 | data.reshape(2, 3) &rarr; 2행 3열로 변경 |
 
 #### 5. pandas
 
@@ -335,41 +307,16 @@ print(df.head())                  # 처음 5개 행 출력
 
 명령어기능예시
 
-pd.DataFrame()
-데이터프레임 생성
-pd.DataFrame(data)
-
-df.head()
-처음 5개의 데이터 확인
-df.head()
-
-df.tail()
-마지막 5개의 데이터 확인
-df.tail()
-
-df.info()
-데이터의 기본 정보 확인
-df.info()
-
-df.describe()
-수치형 데이터의 통계 정보 확인
-df.describe()
-
-df['열이름']
-특정 열 선택
-df['점수']
-
-df.mean()
-평균 계산
-df['점수'].mean()
-
-df.max()
-최댓값 계산
-df['점수'].max()
-
-df.min()
-최솟값 계산
-df['점수'].min()
+| pd.DataFrame() | 데이터프레임 생성 | pd.DataFrame(data) |
+| --- | --- | --- |
+| df.head() | 처음 5개의 데이터 확인 | df.head() |
+| df.tail() | 마지막 5개의 데이터 확인 | df.tail() |
+| df.info() | 데이터의 기본 정보 확인 | df.info() |
+| df.describe() | 수치형 데이터의 통계 정보 확인 | df.describe() |
+| df['열이름'] | 특정 열 선택 | df['점수'] |
+| df.mean() | 평균 계산 | df['점수'].mean() |
+| df.max() | 최댓값 계산 | df['점수'].max() |
+| df.min() | 최솟값 계산 | df['점수'].min() |
 
 ---
 
