@@ -16,15 +16,23 @@ Matplotlib (plt)
 
 #### 2. 이미지 불러오기
 
+```python
 !wget -O image.jpg 이미지 링크
+```
+
 원하는 이미지를 불러올 수 있습니다.
 
 (1) 이미지 출력 준비
 
+```python
 plt.imread()
+```
+
 (2) 이미지 출력
 
+```python
 plt.imshow()
+```
 
 ![Study image](/study-assets/computer-vision-study-2-1.png)
 
@@ -32,14 +40,19 @@ plt.imshow()
 
 (1) 흑백
 
+```python
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+```
+
 아까 불러온 이미지에 흑백 처리를 할 수 있습니다.
 
 ![Study image](/study-assets/computer-vision-study-2-2.png)
 
 (2) 블러
 
+```python
 blurred = cv2.GaussianBlur(gray, (필터, 크기), 0) // 0 부분은 표준 편차인데 0으로 설정하면 자동으로 설정해준다.
+```
 
 ![Study image](/study-assets/computer-vision-study-2-3.png)
 
@@ -47,7 +60,9 @@ blurred = cv2.GaussianBlur(gray, (필터, 크기), 0) // 0 부분은 표준 편�
 
 (3) 엣지 따기
 
+```python
 edges = cv2.Canny(gray, 상한값,하한값)
+```
 
 ![Study image](/study-assets/computer-vision-study-2-4.png)
 
@@ -55,7 +70,9 @@ edges = cv2.Canny(gray, 상한값,하한값)
 
 (4) 이미지 크기 재설정
 
+```python
 resized = cv2.resize(image, (크기, 크기)) // 가로 , 세로
+```
 
 ![Study image](/study-assets/computer-vision-study-2-5.png)
 
@@ -63,7 +80,9 @@ resized = cv2.resize(image, (크기, 크기)) // 가로 , 세로
 
 (5) 색 반전
 
+```python
 inverted = 255 - image //(픽셀 최대값) - (현재값)
+```
 
 ![Study image](/study-assets/computer-vision-study-2-6.png)
 
@@ -71,7 +90,9 @@ inverted = 255 - image //(픽셀 최대값) - (현재값)
 
 (6) 좌우 반전
 
+```python
 flipped = np.fliplr(image)
+```
 
 ![Study image](/study-assets/computer-vision-study-2-7.png)
 
@@ -79,7 +100,10 @@ flipped = np.fliplr(image)
 
 (7) 이미지 밝게 만들기
 
+```python
 brighter = np.clip(image * 밝기값, 0, 255).astype(np.uint8)
+```
+
 곱해지는 밝기 값이 핵심이다.
 
 ![Study image](/study-assets/computer-vision-study-2-8.png)
@@ -88,8 +112,11 @@ brighter = np.clip(image * 밝기값, 0, 255).astype(np.uint8)
 
 (8) 모자이크 처리하기
 
+```python
 h, w = image.shape[:2]
 mosaic = cv2.resize(cv2.resize(image, (w // 10, h // 10)), (w, h), interpolation=cv2.INTER_NEAREST)
+```
+
 이미지를 모자이크 처리하는 코드이다.
 
 ![Study image](/study-assets/computer-vision-study-2-9.png)
@@ -98,10 +125,12 @@ mosaic = cv2.resize(cv2.resize(image, (w // 10, h // 10)), (w, h), interpolation
 
 (9) 제목 달기
 
+```python
 plt.imshow(image)
 plt.title("영어로 작성")
 plt.axis('off') # 테두리 축 숨기기
 plt.show()
+```
 
 ![Study image](/study-assets/computer-vision-study-2-10.png)
 

@@ -36,17 +36,23 @@ print()
 
 주어진 조건의 참(True)과 거짓(False)을 판단하여 실행할 코드를 선택하는 문법이다. if는 조건이 참일 때 실행되고, elif는 다른 조건을 추가로 확인하며, else는 모든 조건이 거짓일 때 실행된다.
 
+```python
 age = 18
 
 if age >= 20:
     print("유료 입장입니다.")
+```
 
 (2) 반복문
 
 같은 작업을 여러 번 실행하는 문법이다. for는 정해진 횟수만큼 반복하고, while은 조건이 참인 동안 반복한다. 또한 break는 반복문을 즉시 종료하고, continue는 현재 반복을 건너뛰고 다음 반복을 수행한다.
 
+```python
 for i in range(3):
     print(i)
+```
+
+```python
 count = 1
 
 while count  [0, 1, 2, 3, 4]
@@ -57,19 +63,23 @@ while count  [0, 1, 2, 3, 4]
 
 특정 작업을 수행하는 코드를 하나로 묶은 것으로, 필요할 때 호출하여 반복해서 사용할 수 있다.
 
+```python
 def hello():
     print("안녕하세요!")
 
 hello()
+```
 
 (2) 매개변수(Parameter)
 
 함수가 전달받은 값을 저장하는 변수이다.
 
+```python
 def hello(name):
     print(name)
 
 hello("IRIS")
+```
 
 (3) 인자(Argument)
 
@@ -77,10 +87,13 @@ hello("IRIS")
 
 return은 함수에서 처리한 결과를 호출한 곳으로 돌려주는 역할을 한다.
 
+```python
 def add(a, b):
     return a + b
 
 print(add(2, 3))
+```
+
 (4) 라이브러리(Library)
 
 미리 작성된 기능을 모아 놓은 것으로, 필요한 기능을 가져와 사용할 수 있다.

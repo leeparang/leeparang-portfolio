@@ -24,6 +24,7 @@ typedef struct 구조체 이름
 
 #### 3. 구조체 예제
 
+```bash
 #include 
 #include 
 
@@ -49,6 +50,8 @@ int main() {
 
     return 0;
 }
+```
+
 struct 구조체 이름을 통해 구조체를 정의해주었고 , 이름, 나이, 점수를 선언해 둡니다.
 
 int main() 함수에서 Student 구조체를 s1이라고 바꾸어 주고

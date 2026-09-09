@@ -31,6 +31,7 @@ category: Notes
 
 #### 3-1.실습
 
+```bash
 #include 
 
 #define LIGHTPIN A0      
@@ -56,9 +57,9 @@ void loop() {
 
   delay(500);
 }
+```
 
-    
-    실습 영상.mp4
+실습 영상.mp4
 2.47MB
 
 #### 

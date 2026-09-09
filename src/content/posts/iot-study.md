@@ -68,6 +68,7 @@ IoT이다.
 
 #### 4. 실습 정리
 
+```bash
 int led1 = 10;
 int led2 = 9;
 int led3 = 8;
@@ -131,6 +132,8 @@ void loop() {
   digitalWrite(led2, LOW);
 
 }
+```
+
 먼저 led 6개를 사용 할 것이기에 led 1~6까지 아두이노에 꽃은 번호를 적어 선언해줍니다.
 
 모든 LED가 OUTPUT 할 수 있도록 세팅 해주고

@@ -42,6 +42,7 @@ flask + HTML 기본 구조
 
 ##### 2. Flask
 
+```bash
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -54,25 +55,40 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
+```
+
 flask 예시 코드
 
 ##### 3. HTML + Jinja2
 
+```bash
+
 Flask + Jinja2 예시
 
-안녕하세요, {{ name }}님! #넘어 온 name 출력
+## 안녕하세요, {{ name }}님!
 
-오늘의 과일 목록:
+ #넘어 온 name 출력
+
+### 오늘의 과일 목록:
 
 {% for item in items %} #아이템 목록에서
-{{ item }} #넘어온 아이템들 출력
+
+- {{ item }} #넘어온 아이템들 출력
 {% endfor %}
 
 {% if "체리" in items %} #만약 체리가 아이템들 안에 있다면
-오늘은 체리가 포함되어 있습니다 #출력
+
+오늘은 체리가 포함되어 있습니다
+
+ #출력
 {% else %} #아니면
-오늘 체리는 없네요 #출력
+
+오늘 체리는 없네요
+
+ #출력
 {% endif %}
+
+```
 
 HTML + Jinja2 예시 코드
 

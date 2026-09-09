@@ -62,11 +62,15 @@ NumPy는 데이터 분석과 시각화에 필요한 수치 계산을 효율적�
 
 (1) numpy 불러오기
 
+```python
 import numpy as np
+```
+
 numpy를 import 해 불러오는 코드이다.
 
 (2) 배열 만들기
 
+```python
 data = np.array([10, 20, 30, 40, 50])
 
 print(data)
@@ -74,21 +78,29 @@ print(data)
 print(data[0])
 
 print(data[2])
+```
+
 배열을 만드는 코드이다. 순서대로 데이터 전체 출력, 배열 0번째 값, 배열 2번째 값을 출력하는 코드이다.
 
 (3) 일정한 배열 만들기
 
+```python
 data = np.arange(1, 10)
 
 print(data)
+```
+
 데이터를 1~ 9까지 배열로 만들고 출력하는 코드이다.
 
 [1,2,3,4,5,6,7,8,9]가 출력될 것이다.
 
 (4) 특정한 배열 만들기
 
+```python
 print(np.zeros(5)) // 0 배열
 print(np.ones(5)) // 1배열
+```
+
 첫 번째 코드는 0을 5개만큼 넣은 배열을 만들고 두 번째 코드는 1을 5개만큼 넣은 배열을 만드는 코드이다.
 
 1. [0,0,0,0,0]이 출력될 것이다.
@@ -97,6 +109,7 @@ print(np.ones(5)) // 1배열
 
 (5) 데이터 분석하기
 
+```python
 data = np.array([72, 85, 91, 64, 88, 95, 78, 83])
 
 print("평균:", np.mean(data))
@@ -104,6 +117,8 @@ print("최댓값:", np.max(data))
 print("최솟값:", np.min(data))
 print("합계:", np.sum(data))
 print("표준편차:", np.std(data))
+```
+
 데이터를 배열로 만든 뒤 순서대로 평균, 최댓값, 최솟값, 합계, 표준편차를 계산해 주는 코드이다.
 
 데이터의 평균: 82.0
@@ -133,6 +148,7 @@ print("표준편차:", np.std(data))
 
 풀이
 
+```python
 scores = np.array([75, 82, 91, 68, 88, 95, 79, 84, 90, 73])
 
 print(data) #배열 전체 출력
@@ -141,6 +157,7 @@ print(np.min(data)) #최솟 출력
 print(np.mean(data)) # 평균 출력
 a = scores.reshape(2,5) # 2행 5열
 print(a)
+```
 
 (7) Numpy의 주요 명령어
 
@@ -192,11 +209,15 @@ Python에서 표 형태의 데이터를 쉽게 다루고 분석할 수 있도록
 
 (1) pandas 불러오기
 
+```python
 import pandas as pd
+```
+
 pandas를 import 해 불러오는 코드이다.
 
 (2) 데이터 만들기
 
+```python
 data = {
 
 '이름': ['A', 'B', 'C', 'D', 'E'], # 이름 데이터
@@ -204,12 +225,17 @@ data = {
 '학년': [1, 1, 2, 2, 1] # 학년 데이터
 
 }
+```
+
 data는 학생의 이름, 점수, 학년 정보를 딕셔너리 형태로 저장한 데이터이다. 각 항목은 리스트로 구성되어 있으며, 이후 Pandas의 DataFrame으로 변환해 표 형태로 사용할 수 있다.
 
 (3) Dataframe으로 변환후 출력
 
+```python
 df = pd.DataFrame(data)
 print(df)
+```
+
 데이터를 Dataframe으로 변환해 표로 출력하는 코드이다.
 
 이름 점수 학년
@@ -228,16 +254,23 @@ print(df)
 
 (4) 데이터 출력하기
 
+```python
 print(df.head())
+```
+
 데이터의 처음 5개 값이 출력된다.
 
 (5) 특정 열 데이터 출력
 
+```python
 print(df['점수'])
+```
+
 특정 열 데이터 출력을 하는 코드이다.
 
 (6) 데이터 분석
 
+```python
 # 점수의 평균 계산
 print("평균:", df['점수'].mean())
 
@@ -246,11 +279,15 @@ print("최댓값:", df['점수'].max())
 
 # 점수의 최솟값 계산
 print("최솟값:", df['점수'].min())
+```
+
 데이터의 평균 , 최댓값 , 최솟값을 계산하는 코드이다.
 
 (7) 수치 데이터의 기본 통계 정보출력
 
+```python
 print(df.describe())
+```
 
 ![Study image](/study-assets/data-analysis-study-5.png)
 
@@ -272,6 +309,7 @@ print(df.describe())
 
 풀이
 
+```python
 data = {
     '이름': ['A', 'B', 'C', 'D', 'E'],
     '점수': [78, 92, 85, 96, 74],
@@ -291,6 +329,7 @@ print("최솟값:", df['점수'].min()) # 최솟값 계산
 print(df.describe())              # 통계 정보 출력
 
 print(df.head())                  # 처음 5개 행 출력
+```
 
 (8) pandas의 주요 명령어
 

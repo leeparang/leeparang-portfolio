@@ -53,6 +53,13 @@ for (const [slug, id, title, published, description, tagList] of sessions) {
   // The article wrapper also contains Tistory's reaction/share script in a
   // few themes; it is not part of the learning note.
   body = body.replace(/<script\b[\s\S]*?<\/script>/gi, "");
+  // Preserve Tistory's code snippets as Markdown fenced code blocks instead
+  // of flattening them into regular prose.
+  body = body.replace(/<pre([^>]*)>([\s\S]*?)<\/pre>/gi, (_, attributes, value) => {
+    const language = attributes.match(/data-ke-language="([^"]+)"/i)?.[1] || "";
+    const code = decode(value.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "")).replace(/\u00a0/g, " ").trim();
+    return `\n\n\`\`\`${language}\n${code}\n\`\`\`\n\n`;
+  });
   const images = [];
   body = body.replace(/<img[^>]+src="([^"]+)"[^>]*>/gi, (_, rawUrl) => {
     const imageUrl = decode(rawUrl);

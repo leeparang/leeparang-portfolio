@@ -42,6 +42,7 @@ void는 반환이 없음을 의미한다.
 
 #### 4. 예제
 
+```bash
 #include 
 
 int sum(int a, int b);    // sum 함수 선언
@@ -65,6 +66,8 @@ int sum(int a, int b)    // sum 함수 정의
 
     return hap;
 }
+```
+
 먼저 int sum(int a, int b);를 통해 sum 함수를 선언해 줍니다.
 
 그리고 int main() 함수 안에서 x, y의 값을 3,4로 지정해 줍니다.

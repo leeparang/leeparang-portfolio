@@ -25,6 +25,7 @@ category: Notes
 
 #### 3. 예제
 
+```bash
 #include 
 
 int hap(int n){
@@ -41,6 +42,7 @@ scanf("%d",&n);
 printf("%d",hap(n));
     return 0;
 }
+```
 
 ![Study image](/study-assets/c-language-study-4-1.png)
 

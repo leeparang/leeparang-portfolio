@@ -26,6 +26,7 @@ malloc 함수를 사용한다.
 
 #### 3. 예제
 
+```bash
 #include 
 #include 
 
@@ -49,6 +50,7 @@ printf("%d",cnt);
 free(arr);
     return 0;
 }
+```
 
 ![Study image](/study-assets/c-language-study-3-2.png)
 
