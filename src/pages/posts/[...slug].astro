@@ -151,32 +151,32 @@ const jsonLd = {
 
 <script is:inline data-swup-reload>
     (() => {
-        const noteLock = document.querySelector('[data-note-lock]');
-        const noteContent = document.querySelector('[data-note-content]');
-        const noteForm = document.querySelector('[data-note-password-form]');
-        const noteMessage = document.querySelector('[data-note-password-message]');
+        const unlockKey = 'portfolio-study-notes-unlocked';
         const unlockNotes = () => {
-            if (noteContent) noteContent.hidden = false;
-            if (noteLock) noteLock.hidden = true;
+            document.querySelectorAll('[data-note-content]').forEach((content) => content.hidden = false);
+            document.querySelectorAll('[data-note-lock]').forEach((lock) => lock.hidden = true);
         };
 
-        if (noteLock && noteContent && sessionStorage.getItem('study-notes-unlocked') === 'true') {
-            unlockNotes();
-        }
+        // Store the unlocked state before changing the DOM. This also covers a
+        // Swup page replacement, which was previously making the first submit
+        // appear to be ignored.
+        if (localStorage.getItem(unlockKey) === 'true') unlockNotes();
 
-        if (noteForm && noteForm.dataset.lockReady !== 'true') {
-            noteForm.dataset.lockReady = 'true';
-            noteForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const input = noteForm.querySelector('input');
-                if (input?.value === '0725') {
-                    sessionStorage.setItem('study-notes-unlocked', 'true');
-                    unlockNotes();
-                } else if (noteMessage) {
-                    noteMessage.textContent = 'Incorrect password.';
-                }
-            });
-        }
+        document.addEventListener('submit', (event) => {
+            const form = event.target instanceof Element
+                ? event.target.closest('[data-note-password-form]')
+                : null;
+            if (!form) return;
+            event.preventDefault();
+            const input = form.querySelector('input');
+            const message = form.parentElement?.querySelector('[data-note-password-message]');
+            if (input?.value === '0725') {
+                localStorage.setItem(unlockKey, 'true');
+                unlockNotes();
+            } else if (message) {
+                message.textContent = 'Incorrect password.';
+            }
+        }, true);
     })();
 </script>
 
