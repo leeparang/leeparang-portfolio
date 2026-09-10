@@ -109,7 +109,7 @@ const jsonLd = {
 
 
             {isProtected && (
-                <div class="note-lock mb-6 onload-animation" data-note-lock>
+                <div class="note-lock mb-6" data-note-lock>
                     <p>Protected Content</p>
                     <form data-note-password-form>
                         <input type="password" inputmode="numeric" autocomplete="current-password" placeholder="Password" aria-label="Study note password" required />
@@ -119,7 +119,7 @@ const jsonLd = {
                 </div>
             )}
 
-            <div data-note-content hidden={isProtected}>
+            <div data-note-content class:list={{ "note-content-locked": isProtected }}>
                 <Markdown class="mb-6 markdown-content onload-animation">
                     <Content />
                 </Markdown>
@@ -154,40 +154,6 @@ const jsonLd = {
 
 </MainGridLayout>
 
-<script is:inline data-swup-reload>
-    (() => {
-        const unlockKey = 'portfolio-study-notes-unlocked';
-        const unlockNotes = () => {
-            document.documentElement.classList.add('study-notes-unlocked');
-            document.querySelectorAll('[data-note-content]').forEach((content) => content.hidden = false);
-            document.querySelectorAll('[data-note-lock]').forEach((lock) => lock.hidden = true);
-        };
-
-        // Store the unlocked state before changing the DOM. This also covers a
-        // Swup page replacement, which was previously making the first submit
-        // appear to be ignored.
-        if (localStorage.getItem(unlockKey) === 'true') unlockNotes();
-
-        if (window.__portfolioNoteLockListener) return;
-        window.__portfolioNoteLockListener = true;
-        document.addEventListener('submit', (event) => {
-            const form = event.target instanceof Element
-                ? event.target.closest('[data-note-password-form]')
-                : null;
-            if (!form) return;
-            event.preventDefault();
-            const input = form.querySelector('input');
-            const message = form.parentElement?.querySelector('[data-note-password-message]');
-            if (input?.value === '0725') {
-                localStorage.setItem(unlockKey, 'true');
-                unlockNotes();
-            } else if (message) {
-                message.textContent = 'Incorrect password.';
-            }
-        }, true);
-    })();
-</script>
-
 <style>
     .note-lock { padding: 2.25rem; border: 1px solid var(--line-divider); border-radius: 1rem; background: var(--btn-regular-bg); }
     .note-lock p { margin: 0 0 1rem; color: var(--text-90); font-size: 1.1rem; font-weight: 800; }
@@ -196,6 +162,7 @@ const jsonLd = {
     .note-lock input:focus { border-color: var(--primary); }
     .note-lock button { padding: .7rem 1rem; border: 0; border-radius: .65rem; background: var(--primary); color: white; font-weight: 700; cursor: pointer; }
     .note-lock span { display: block; min-height: 1.2rem; margin-top: .6rem; color: #d74a4a; font-size: .8rem; }
-    :global(html.study-notes-unlocked [data-note-content][hidden]) { display: block !important; }
+    .note-content-locked { display: none; }
+    :global(html.study-notes-unlocked .note-content-locked) { display: block; }
     :global(html.study-notes-unlocked [data-note-lock]) { display: none !important; }
 </style>

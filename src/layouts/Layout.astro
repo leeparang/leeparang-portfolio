@@ -506,6 +506,7 @@ window.onresize = () => {
 
 <script>
 let scrollMotionObserver: IntersectionObserver | undefined;
+let scrollMotionHookBound = false;
 
 const revealOnScroll = () => {
 	document.documentElement.classList.add("scroll-motion-ready");
@@ -524,15 +525,63 @@ const revealOnScroll = () => {
 	});
 };
 
-if (window.swup) {
+const installScrollMotion = () => {
 	revealOnScroll();
-	window.swup.hooks.on("page:view", revealOnScroll);
-} else {
-	document.addEventListener("swup:enable", () => {
-		revealOnScroll();
+	if (window.swup && !scrollMotionHookBound) {
+		scrollMotionHookBound = true;
 		window.swup.hooks.on("page:view", revealOnScroll);
-	}, { once: true });
+	}
+};
+
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", installScrollMotion, { once: true });
+} else {
+	installScrollMotion();
 }
+
+document.addEventListener("swup:enable", installScrollMotion, { once: true });
+</script>
+
+<script is:inline>
+    (() => {
+        if (window.__portfolioStudyLockBound) return;
+        window.__portfolioStudyLockBound = true;
+
+        const unlockKey = 'portfolio-study-notes-unlocked';
+        const unlock = () => {
+            try {
+                localStorage.setItem(unlockKey, 'true');
+            } catch {
+                // The page still opens for this visit if browser storage is unavailable.
+            }
+            document.documentElement.classList.add('study-notes-unlocked');
+        };
+
+        try {
+            if (localStorage.getItem(unlockKey) === 'true') {
+                document.documentElement.classList.add('study-notes-unlocked');
+            }
+        } catch {
+            // Ignore unavailable storage.
+        }
+
+        document.addEventListener('submit', (event) => {
+            const form = event.target instanceof HTMLFormElement
+                ? event.target
+                : null;
+            if (!form?.matches('[data-note-password-form]')) return;
+
+            event.preventDefault();
+            const input = form.querySelector('input[type="password"]');
+            const message = form.parentElement?.querySelector('[data-note-password-message]');
+            if (input?.value === '0725') {
+                unlock();
+                input.value = '';
+            } else if (message) {
+                message.textContent = 'Incorrect password.';
+            }
+        }, true);
+    })();
 </script>
 
 <script>
