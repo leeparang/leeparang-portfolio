@@ -504,44 +504,6 @@ window.onresize = () => {
 
 </script>
 
-<script>
-let scrollMotionObserver: IntersectionObserver | undefined;
-let scrollMotionHookBound = false;
-
-const revealOnScroll = () => {
-	document.documentElement.classList.add("scroll-motion-ready");
-	scrollMotionObserver?.disconnect();
-	scrollMotionObserver = new IntersectionObserver((entries, observer) => {
-		entries.forEach((entry) => {
-			if (!entry.isIntersecting) return;
-			entry.target.classList.add("scroll-visible");
-			observer.unobserve(entry.target);
-		});
-	}, { threshold: 0.1, rootMargin: "0px 0px -6%" });
-
-	document.querySelectorAll<HTMLElement>(".onload-animation").forEach((item) => {
-		item.classList.remove("scroll-visible");
-		scrollMotionObserver?.observe(item);
-	});
-};
-
-const installScrollMotion = () => {
-	revealOnScroll();
-	if (window.swup && !scrollMotionHookBound) {
-		scrollMotionHookBound = true;
-		window.swup.hooks.on("page:view", revealOnScroll);
-	}
-};
-
-if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", installScrollMotion, { once: true });
-} else {
-	installScrollMotion();
-}
-
-document.addEventListener("swup:enable", installScrollMotion, { once: true });
-</script>
-
 <script is:inline>
     (() => {
         if (window.__portfolioStudyLockBound) return;
