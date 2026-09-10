@@ -46,7 +46,7 @@ const interval = 50;
 							image={entry.data.image}
 							description={entry.data.description}
 							draft={entry.data.draft}
-							class:list="onload-animation"
+							class:list="home-post-card"
 							style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
 						></PostCard>
 					))}
@@ -64,4 +64,6 @@ const interval = 50;
 	.home-category-filter button.is-active { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--card-bg)); color: var(--primary); }
 	.home-section h2 { margin: 0 0 1rem .45rem; color: var(--text-90); font-size: 1.25rem; font-weight: 800; letter-spacing: -.04em; }
 	.post-list { display: flex; flex-direction: column; gap: 1rem; }
+	/* Home posts must remain visible even if a page transition is interrupted. */
+	.home-post-card { opacity: 1; transform: none; filter: none; }
 </style>
