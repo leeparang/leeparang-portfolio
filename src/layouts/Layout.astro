@@ -547,6 +547,67 @@ window.onresize = () => {
 </script>
 
 <script>
+let homeMotionObserver: IntersectionObserver | undefined;
+let homeMotionHookBound = false;
+
+const revealHomeCards = () => {
+	homeMotionObserver?.disconnect();
+	document.documentElement.classList.remove("home-motion-active");
+
+	if (window.location.pathname !== "/" || !("IntersectionObserver" in window)) return;
+	const cards = Array.from(document.querySelectorAll<HTMLElement>(".home-post-card"));
+	if (cards.length === 0) return;
+
+	const visibleCards = new Set<HTMLElement>();
+	cards.forEach((card) => {
+		card.classList.remove("home-motion-visible");
+		const bounds = card.getBoundingClientRect();
+		if (bounds.top < window.innerHeight * 0.94 && bounds.bottom > 0) {
+			card.classList.add("home-motion-visible");
+			visibleCards.add(card);
+		}
+	});
+
+	// The root class is added only after above-the-fold cards are already
+	// visible, so an observer failure can never leave the page blank.
+	document.documentElement.classList.add("home-motion-active");
+	homeMotionObserver = new IntersectionObserver((entries, observer) => {
+		entries.forEach((entry) => {
+			if (!entry.isIntersecting) return;
+			entry.target.classList.add("home-motion-visible");
+			observer.unobserve(entry.target);
+		});
+	}, { threshold: 0.08, rootMargin: "0px 0px -8%" });
+
+	cards.filter((card) => !visibleCards.has(card)).forEach((card) => {
+		homeMotionObserver?.observe(card);
+	});
+};
+
+const installHomeMotion = () => {
+	revealHomeCards();
+	if (window.swup && !homeMotionHookBound) {
+		homeMotionHookBound = true;
+		window.swup.hooks.on("page:view", revealHomeCards);
+	}
+};
+
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", installHomeMotion, { once: true });
+} else {
+	installHomeMotion();
+}
+document.addEventListener("swup:enable", installHomeMotion, { once: true });
+
+document.addEventListener("click", (event) => {
+	const filter = event.target instanceof Element
+		? event.target.closest("[data-home-filter]")
+		: null;
+	if (filter) requestAnimationFrame(revealHomeCards);
+});
+</script>
+
+<script>
 import PhotoSwipeLightbox from "photoswipe/lightbox"
 import "photoswipe/style.css"
 
