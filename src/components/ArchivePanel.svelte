@@ -66,22 +66,51 @@
     };
     const items = Array.from(node.querySelectorAll<HTMLElement>(".flow-item"));
     let scrollFrame = 0;
-    const syncScrollProgress = () => {
+    let revealedCardIndex = 0;
+    let targetCardIndex = 0;
+    let revealTimer = 0;
+    const revealStepMs = 820;
+
+    const applyRevealState = () => {
+      items.forEach((item, index) => item.classList.toggle("is-revealed", index <= revealedCardIndex));
+      visibleConnectorIndex = revealedCardIndex - 1;
+    };
+    // A scroll wheel or trackpad can jump over several cards in one frame.
+    // Play the route one segment at a time so those jumps still read as a
+    // drawn circuit path instead of several connectors popping in together.
+    const playNextRevealStep = () => {
+      if (revealedCardIndex === targetCardIndex) {
+        revealTimer = 0;
+        return;
+      }
+      revealedCardIndex += targetCardIndex > revealedCardIndex ? 1 : -1;
+      applyRevealState();
+      revealTimer = window.setTimeout(playNextRevealStep, revealStepMs);
+    };
+    const queueRevealPlayback = () => {
+      if (!revealTimer) playNextRevealStep();
+    };
+    const syncScrollProgress = (immediately = false) => {
       scrollFrame = 0;
       const revealLine = window.innerHeight * .82;
-      let lastVisible = 0;
+      let nextTargetIndex = 0;
       items.forEach((item, index) => {
-        if (item.getBoundingClientRect().top <= revealLine) lastVisible = index;
+        if (item.getBoundingClientRect().top <= revealLine) nextTargetIndex = index;
       });
-      items.forEach((item, index) => item.classList.toggle("is-revealed", index <= lastVisible));
-      visibleConnectorIndex = lastVisible - 1;
+      targetCardIndex = nextTargetIndex;
+      if (immediately) {
+        revealedCardIndex = targetCardIndex;
+        applyRevealState();
+        return;
+      }
+      queueRevealPlayback();
     };
     const scheduleScrollSync = () => {
       if (!scrollFrame) scrollFrame = requestAnimationFrame(syncScrollProgress);
     };
     // This is reversible: scrolling back upward retracts the next connector
     // and its card instead of leaving the full route drawn on screen.
-    syncScrollProgress();
+    syncScrollProgress(true);
     scheduleUpdate();
     window.addEventListener("scroll", scheduleScrollSync, { passive: true });
     const resizeObserver = new ResizeObserver(scheduleUpdate);
@@ -90,6 +119,7 @@
       destroy() {
         if (frame) cancelAnimationFrame(frame);
         if (scrollFrame) cancelAnimationFrame(scrollFrame);
+        if (revealTimer) window.clearTimeout(revealTimer);
         window.removeEventListener("scroll", scheduleScrollSync);
         resizeObserver.disconnect();
         connectorPaths = [];
