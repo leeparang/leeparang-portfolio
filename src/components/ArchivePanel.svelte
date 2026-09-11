@@ -192,23 +192,24 @@
 </div>
 
 <style>
-  .archive-shell { margin: .4rem 0 2.5rem; padding: .7rem clamp(.2rem, 2vw, 1.2rem) 1rem; }
+  .archive-shell { --wire-sleeve: color-mix(in srgb, var(--primary) 72%, #88dce3); --wire-core: color-mix(in srgb, var(--primary) 38%, white); --pin-body-fill: #252c30; --pin-body-stroke: #101518; --pin-metal-color: #d6a84b; --pin-metal-glow: #f4d690; margin: .4rem 0 2.5rem; padding: .7rem clamp(.2rem, 2vw, 1.2rem) 1rem; }
+  :global(:root.dark) .archive-shell { --wire-sleeve: color-mix(in srgb, var(--primary) 68%, #6bbbc5); --wire-core: color-mix(in srgb, var(--primary) 64%, var(--card-bg)); --pin-body-fill: oklch(.285 .015 var(--hue)); --pin-body-stroke: oklch(.12 .012 var(--hue)); --pin-metal-color: #f0c76a; --pin-metal-glow: #efc96f; }
   .archive-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; color: var(--text-50); font-size: .83rem; font-weight: 800; }
   .archive-summary > div:first-child { display: flex; align-items: baseline; gap: .55rem; }
   .archive-summary strong { color: var(--primary); font-size: 1.12rem; font-weight: 900; }
   .view-switch { display: inline-flex; gap: .2rem; padding: .22rem; border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--line-divider)); border-radius: 999px; background: color-mix(in srgb, var(--primary) 4%, var(--card-bg)); }
   .view-switch button { border: 0; border-radius: 999px; padding: .38rem .74rem; color: var(--text-50); background: transparent; font: inherit; font-size: .75rem; font-weight: 800; cursor: pointer; transition: .2s ease; }
-  .view-switch button.is-active { color: white; background: var(--primary); box-shadow: 0 .25rem .8rem color-mix(in srgb, var(--primary) 27%, transparent); }
+  .view-switch button.is-active { color: var(--deep-text); background: var(--primary); box-shadow: 0 .25rem .8rem color-mix(in srgb, var(--primary) 27%, transparent); }
   .archive-flow { position: relative; display: grid; gap: 1.25rem; padding: .5rem 0 1rem; isolation: isolate; }
   .connector-layer { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .connector { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; vector-effect: non-scaling-stroke; transition: opacity .2s ease 1s, stroke-dashoffset 1.15s cubic-bezier(.22, .8, .18, 1); }
   .connector.is-visible { opacity: 1; stroke-dashoffset: 0; transition-delay: 0s, 0s; }
-  .connector-sleeve { stroke: #8bd7df; stroke-width: 8px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 14%, transparent)); }
-  .connector-core { stroke: #efffff; stroke-width: 1.8px; }
+  .connector-sleeve { stroke: var(--wire-sleeve); stroke-width: 8px; filter: drop-shadow(0 .18rem .32rem color-mix(in srgb, var(--primary) 14%, transparent)); }
+  .connector-core { stroke: var(--wire-core); stroke-width: 1.8px; }
   .pin-ends { opacity: 0; transition: opacity .28s ease .62s; }
   .pin-ends.is-visible { opacity: 1; }
-  .pin-body { fill: #252c30; stroke: #101518; stroke-width: 1.5px; }
-  .pin-metal { stroke: #d6a84b; stroke-width: 3.2px; stroke-linecap: round; stroke-dasharray: 26; stroke-dashoffset: 26; filter: drop-shadow(0 0 .18rem #f4d690); transition: stroke-dashoffset .38s cubic-bezier(.2, .75, .2, 1); }
+  .pin-body { fill: var(--pin-body-fill); stroke: var(--pin-body-stroke); stroke-width: 1.5px; }
+  .pin-metal { stroke: var(--pin-metal-color); stroke-width: 3.2px; stroke-linecap: round; stroke-dasharray: 26; stroke-dashoffset: 26; filter: drop-shadow(0 0 .18rem var(--pin-metal-glow)); transition: stroke-dashoffset .38s cubic-bezier(.2, .75, .2, 1); }
   .pin-ends.is-visible .pin-metal { stroke-dashoffset: 0; transition-delay: .78s; }
   .flow-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 9.5rem; }
   .flow-card { position: relative; display: flex; width: 58%; min-width: 0; flex-direction: column; justify-content: center; min-height: 6.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line-divider); border-radius: 1rem; color: inherit; background: var(--card-bg); box-shadow: 0 .65rem 1.8rem color-mix(in srgb, var(--primary) 7%, transparent); text-decoration: none; opacity: 1; filter: none; transform: translateY(0); transition: border-color .22s ease, box-shadow .22s ease; }
