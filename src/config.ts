@@ -43,11 +43,6 @@ export const navBarConfig: NavBarConfig = {
 		{ name: "Home", url: "/" },
 		{ name: "Archive", url: "/archive/" },
 		{ name: "About", url: "/about/" },
-		{
-			name: "GitHub",
-			url: "https://github.com/leeparang", // Internal links should not include the base path, as it is automatically added
-			external: true, // Show an external link icon and will open in a new tab
-		},
 	],
 };
 
