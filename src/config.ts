@@ -11,7 +11,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "Development · Security Portfolio",
 	lang: "ko", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
-		hue: 200, // Sky-blue accent
+		hue: 250, // Navy-blue accent
 		fixed: false, // Hide the theme color picker for visitors
 	},
 	banner: {
