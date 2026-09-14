@@ -38,7 +38,7 @@ category: Notes
 
 #### 4. 인공지능의 모티브
 
-![Study image](/study-assets/AI-study-2.jpg)
+![Study image](/study-assets/AI-study-2.svg)
 
 ![Study image](/study-assets/AI-study-3.jpg)
 

@@ -86,7 +86,7 @@ category: Notes
 
 - OpenCV: 이미지와 영상을 처리하는 컴퓨터 비전 라이브러리
 
-- ![Study image](/study-assets/computer-vision-study-5.jpg)
+- ![Study image](/study-assets/computer-vision-study-5.svg)
 
 - PyTorch: 딥러닝 모델을 만들고 학습시키는 프레임워크
 
