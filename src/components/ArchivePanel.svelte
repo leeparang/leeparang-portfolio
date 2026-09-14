@@ -192,8 +192,8 @@
 </div>
 
 <style>
-  .archive-shell { --wire-sleeve: color-mix(in srgb, var(--primary) 72%, #88dce3); --wire-core: color-mix(in srgb, var(--primary) 38%, white); --pin-body-fill: #252c30; --pin-body-stroke: #101518; --pin-metal-color: #d6a84b; --pin-metal-glow: #f4d690; margin: .4rem 0 2.5rem; padding: .7rem clamp(.2rem, 2vw, 1.2rem) 1rem; }
-  :global(:root.dark) .archive-shell { --wire-sleeve: color-mix(in srgb, var(--primary) 68%, #6bbbc5); --wire-core: color-mix(in srgb, var(--primary) 64%, var(--card-bg)); --pin-body-fill: oklch(.285 .015 var(--hue)); --pin-body-stroke: oklch(.12 .012 var(--hue)); --pin-metal-color: #f0c76a; --pin-metal-glow: #efc96f; }
+  .archive-shell { --wire-sleeve: #8bd7df; --wire-core: #efffff; --pin-body-fill: #252c30; --pin-body-stroke: #101518; --pin-metal-color: #d6a84b; --pin-metal-glow: #f4d690; margin: .4rem 0 2.5rem; padding: .7rem clamp(.2rem, 2vw, 1.2rem) 1rem; }
+  :global(:root.dark) .archive-shell { --wire-sleeve: #82d4dd; --wire-core: #e9ffff; --pin-body-fill: oklch(.285 .015 var(--hue)); --pin-body-stroke: oklch(.12 .012 var(--hue)); --pin-metal-color: #f0c76a; --pin-metal-glow: #efc96f; }
   .archive-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; color: var(--text-50); font-size: .83rem; font-weight: 800; }
   .archive-summary > div:first-child { display: flex; align-items: baseline; gap: .55rem; }
   .archive-summary strong { color: var(--primary); font-size: 1.12rem; font-weight: 900; }
