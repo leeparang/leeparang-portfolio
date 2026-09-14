@@ -111,6 +111,14 @@ const bannerOffset =
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
 		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
+			// Apply the new site defaults once, while preserving choices made after this release.
+			const themePreferenceVersion = 'navy-light-v1';
+			if (localStorage.getItem('themePreferenceVersion') !== themePreferenceVersion) {
+				localStorage.removeItem('theme');
+				localStorage.removeItem('hue');
+				localStorage.setItem('themePreferenceVersion', themePreferenceVersion);
+			}
+
 			// Load the theme from local storage
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
 			switch (theme) {
