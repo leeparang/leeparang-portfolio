@@ -19,6 +19,10 @@ const affiliations = (await getCollection("posts"))
 	.sort((a, b) => a.data.published.getTime() - b.data.published.getTime());
 const formatDate = (date: Date) => new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "2-digit" })
 	.format(date).replace(/\. /g, ".").replace(/\.$/, "");
+const affiliationLogos: Record<string, { src: string; alt: string }> = {
+	"sunrin-school": { src: "/affiliation-logos/sunrin.png", alt: "Sunrin Internet High School logo" },
+	"iris-member": { src: "/affiliation-logos/iris.png", alt: "IRIS logo" },
+};
 ---
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
@@ -36,7 +40,17 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat("ko-KR", { year: "num
                             <a class="timeline-item" href={getPostUrlBySlug(post.slug)} data-scroll-reveal style={`--reveal-delay: ${index * 90}ms`}>
                                 <span class="dot"></span>
                                 <div>
-                                    <h3>{post.data.title}</h3>
+                                    <div class="affiliation-title">
+                                        <h3>{post.data.title}</h3>
+                                        {affiliationLogos[post.slug] && (
+                                            <img
+                                                class="affiliation-logo"
+                                                src={affiliationLogos[post.slug].src}
+                                                alt={affiliationLogos[post.slug].alt}
+                                                loading="lazy"
+                                            />
+                                        )}
+                                    </div>
                                     <div class="meta">
                                         {post.data.role && <span class="badge">{post.data.role}</span>}
                                         <time>{formatDate(post.data.published)} ~ Present</time>
@@ -86,9 +100,11 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat("ko-KR", { year: "num
     .timeline::before { content: ""; position: absolute; top: .65rem; bottom: .65rem; left: .48rem; width: 2px; background: color-mix(in srgb, var(--primary) 24%, transparent); }
     .timeline-item { position: relative; display: block; color: inherit; text-decoration: none; }
     .dot { position: absolute; top: .38rem; left: -2.85rem; width: .98rem; height: .98rem; border: 4px solid var(--card-bg); border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 20%, transparent); }
+    .affiliation-title { display: flex; align-items: center; gap: .65rem; }
     .timeline-item h3 { margin: 0; font-size: 1.15rem; }
+    .affiliation-logo { width: 2.35rem; height: 2.35rem; flex: none; object-fit: contain; }
     .meta { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-top: .75rem; color: var(--text-50); font-size: .86rem; }
     .badge { padding: .29rem .72rem; border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent); border-radius: 999px; color: var(--primary); background: color-mix(in srgb, var(--primary) 7%, transparent); font-weight: 700; }
     @media (prefers-reduced-motion: reduce) { html.scroll-reveal-ready [data-scroll-reveal] { opacity: 1; transform: none; transition: none; } }
-    @media (max-width: 640px) { .affiliation-section { margin-left: 0; margin-right: 0; }.timeline { padding-left: 2.3rem; }.dot { left: -2.3rem; } }
+    @media (max-width: 640px) { .affiliation-section { margin-left: 0; margin-right: 0; }.timeline { padding-left: 2.3rem; }.dot { left: -2.3rem; }.affiliation-logo { width: 2rem; height: 2rem; } }
 </style>
