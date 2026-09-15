@@ -40,6 +40,7 @@ export const siteConfig: SiteConfig = {
 
 export const navBarConfig: NavBarConfig = {
 	links: [
+		{ name: "진로", url: "/career/" },
 		{ name: "Home", url: "/" },
 		{ name: "Archive", url: "/archive/" },
 		{ name: "About", url: "/about/" },

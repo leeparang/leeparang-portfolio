@@ -1,0 +1,20 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { url } from "@utils/url-utils";
+
+const documentUrl = url("/documents/career-portfolio.pdf");
+---
+
+<MainGridLayout title="진로">
+    <section class="career-document" aria-label="진로 포트폴리오 PDF">
+        <object data={documentUrl} type="application/pdf">
+            <a href={documentUrl} target="_blank" rel="noreferrer">PDF 열기</a>
+        </object>
+    </section>
+</MainGridLayout>
+
+<style>
+    .career-document { overflow: hidden; min-height: min(78vh, 64rem); border-radius: var(--radius-large); background: var(--card-bg); }
+    .career-document object { display: block; width: 100%; min-height: min(78vh, 64rem); border: 0; }
+    @media (max-width: 640px) { .career-document, .career-document object { min-height: 72vh; } }
+</style>
