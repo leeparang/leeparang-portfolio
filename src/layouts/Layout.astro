@@ -528,7 +528,7 @@ const revealHomeCards = () => {
 	cards.forEach((card) => {
 		card.classList.remove("home-motion-visible");
 		const bounds = card.getBoundingClientRect();
-		if (bounds.top < window.innerHeight * 0.94 && bounds.bottom > 0) {
+		if (bounds.top < window.innerHeight * 1.1 && bounds.bottom > 0) {
 			card.classList.add("home-motion-visible");
 			visibleCards.add(card);
 		}
@@ -543,7 +543,7 @@ const revealHomeCards = () => {
 			entry.target.classList.add("home-motion-visible");
 			observer.unobserve(entry.target);
 		});
-	}, { threshold: 0.08, rootMargin: "0px 0px -8%" });
+	}, { threshold: 0.03, rootMargin: "0px 0px 10%" });
 
 	cards.filter((card) => !visibleCards.has(card)).forEach((card) => {
 		homeMotionObserver?.observe(card);
