@@ -1,5 +1,5 @@
 ---
-title: IRIS - AI Study · 1차시
+title: IRIS - Deep Learning Study · 1차시
 published: 2026-07-01
 description: Introduction to AI and deep learning
 tags: [AI, Deep Learning, IRIS, Study]
