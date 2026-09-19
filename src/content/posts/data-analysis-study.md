@@ -1,6 +1,6 @@
 ---
 title: IRIS - Data Analysis Study · 1차시
-published: 2026-09-01
+published: 2026-08-01
 description: Data analysis and visualization
 tags: [Data Analysis, Visualization, IRIS, Study]
 category: Notes
