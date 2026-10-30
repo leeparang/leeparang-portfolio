@@ -22,8 +22,18 @@ const sessions = [
   ["AI-study", 29, "IRIS - AI Study · 1차시", "2026-07-01", "Introduction to AI and deep learning", "AI, Deep Learning, IRIS, Study"],
   ["computer-vision-study", 30, "IRIS - Computer Vision Study · 1차시", "2026-08-01", "Computer vision fundamentals", "Computer Vision, AI, IRIS, Study"],
   ["computer-vision-study-2", 31, "IRIS - Computer Vision Study · 2차시", "2026-08-02", "Computer vision practice", "Computer Vision, AI, IRIS, Study"],
+  ["computer-vision-study-4", 39, "IRIS - Computer Vision Study · 4차시", "2026-08-04", "Real-time data processing with YOLO and SSD", "Computer Vision, AI, Deep Learning, IRIS, Study"],
   ["data-analysis-study", 32, "IRIS - Data Analysis Study · 1차시", "2026-09-01", "Data analysis and visualization", "Data Analysis, Visualization, IRIS, Study"],
 ];
+
+const requestedId = process.argv[2] ? Number(process.argv[2]) : null;
+const selectedSessions = requestedId
+  ? sessions.filter(([, id]) => id === requestedId)
+  : sessions;
+
+if (requestedId && selectedSessions.length === 0) {
+  throw new Error(`No import configuration found for Tistory post ${requestedId}`);
+}
 
 const decode = (value) => value
   .replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/&lt;/gi, "<")
@@ -57,7 +67,7 @@ function tableToMarkdown(tableHtml) {
 }
 
 await mkdir(imagesDir, { recursive: true });
-for (const [slug, id, title, published, description, tagList] of sessions) {
+for (const [slug, id, title, published, description, tagList] of selectedSessions) {
   const sourceUrl = `https://leeparang10.tistory.com/${id}`;
   const html = await (await fetch(sourceUrl)).text();
   const articleBody = getArticleBody(html);
@@ -70,10 +80,12 @@ for (const [slug, id, title, published, description, tagList] of sessions) {
   // Preserve Tistory's code snippets as Markdown fenced code blocks instead
   // of flattening them into regular prose.
   body = body.replace(/<pre([^>]*)>([\s\S]*?)<\/pre>/gi, (_, attributes, value) => {
-    const language = attributes.match(/data-ke-language="([^"]+)"/i)?.[1] || "";
+    const language = id === 39 ? "python" : attributes.match(/data-ke-language="([^"]+)"/i)?.[1] || "";
     const code = decode(value.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "")).replace(/\u00a0/g, " ").trim();
     return `\n\n\`\`\`${language}\n${code}\n\`\`\`\n\n`;
   });
+  body = body.replace(/<(?:b|strong)[^>]*>([\s\S]*?)<\/(?:b|strong)>/gi, (_, value) => `**${text(value)}**`);
+  body = body.replace(/<(?:i|em)[^>]*>([\s\S]*?)<\/(?:i|em)>/gi, (_, value) => `*${text(value)}*`);
   const images = [];
   body = body.replace(/<img[^>]+src="([^"]+)"[^>]*>/gi, (_, rawUrl) => {
     const imageUrl = decode(rawUrl);
