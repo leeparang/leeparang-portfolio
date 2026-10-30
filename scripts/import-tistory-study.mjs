@@ -23,6 +23,7 @@ const sessions = [
   ["computer-vision-study", 30, "IRIS - Computer Vision Study · 1차시", "2026-08-01", "Computer vision fundamentals", "Computer Vision, AI, IRIS, Study"],
   ["computer-vision-study-2", 31, "IRIS - Computer Vision Study · 2차시", "2026-08-02", "Computer vision practice", "Computer Vision, AI, IRIS, Study"],
   ["computer-vision-study-4", 39, "IRIS - Computer Vision Study · 4차시", "2026-08-04", "Real-time data processing with YOLO and SSD", "Computer Vision, AI, Deep Learning, IRIS, Study"],
+  ["computer-vision-study-5", 40, "IRIS - Computer Vision Study · 5차시", "2026-08-05", "Real-time object detection and confidence thresholds", "Computer Vision, AI, YOLO, IRIS, Study"],
   ["data-analysis-study", 32, "IRIS - Data Analysis Study · 1차시", "2026-09-01", "Data analysis and visualization", "Data Analysis, Visualization, IRIS, Study"],
 ];
 
@@ -79,10 +80,13 @@ for (const [slug, id, title, published, description, tagList] of selectedSession
   body = body.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (_, tableHtml) => tableToMarkdown(tableHtml));
   // Preserve Tistory's code snippets as Markdown fenced code blocks instead
   // of flattening them into regular prose.
+  const codeBlocks = [];
   body = body.replace(/<pre([^>]*)>([\s\S]*?)<\/pre>/gi, (_, attributes, value) => {
-    const language = id === 39 ? "python" : attributes.match(/data-ke-language="([^"]+)"/i)?.[1] || "";
+    const language = id === 39 || id === 40 ? "python" : attributes.match(/data-ke-language="([^"]+)"/i)?.[1] || "";
     const code = decode(value.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "")).replace(/\u00a0/g, " ").trim();
-    return `\n\n\`\`\`${language}\n${code}\n\`\`\`\n\n`;
+    const token = `__TISTORY_CODE_BLOCK_${codeBlocks.length}__`;
+    codeBlocks.push(`\`\`\`${language}\n${code}\n\`\`\``);
+    return `\n\n${token}\n\n`;
   });
   body = body.replace(/<(?:b|strong)[^>]*>([\s\S]*?)<\/(?:b|strong)>/gi, (_, value) => `**${text(value)}**`);
   body = body.replace(/<(?:i|em)[^>]*>([\s\S]*?)<\/(?:i|em)>/gi, (_, value) => `*${text(value)}*`);
@@ -103,6 +107,7 @@ for (const [slug, id, title, published, description, tagList] of selectedSession
   body = body.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, (_, value) => `\n- ${text(value)}`);
   body = body.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (_, value) => `\n\n${text(value)}\n\n`);
   body = text(body).replace(/\n {0,2}\n/g, "\n\n").replace(/\n?공유하기\s*$/u, "");
+  body = body.replace(/__TISTORY_CODE_BLOCK_(\d+)__/g, (_, index) => codeBlocks[Number(index)]);
   const markdown = `---\ntitle: ${title}\npublished: ${published}\ndescription: ${description}\ntags: [${tagList}]\ncategory: Notes\n---\n\n${body}\n\n---\n\n[Original post on Tistory](${sourceUrl})\n`;
   await writeFile(path.join(postsDir, `${slug}.md`), markdown, "utf8");
   console.log(`Imported ${id}: ${images.length} image(s)`);
