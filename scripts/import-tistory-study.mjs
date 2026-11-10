@@ -24,6 +24,8 @@ const sessions = [
   ["computer-vision-study-2", 31, "IRIS - Computer Vision Study · 2차시", "2026-08-02", "Computer vision practice", "Computer Vision, AI, IRIS, Study"],
   ["computer-vision-study-4", 39, "IRIS - Computer Vision Study · 4차시", "2026-08-04", "Real-time data processing with YOLO and SSD", "Computer Vision, AI, Deep Learning, IRIS, Study"],
   ["computer-vision-study-5", 40, "IRIS - Computer Vision Study · 5차시", "2026-08-05", "Real-time object detection and confidence thresholds", "Computer Vision, AI, YOLO, IRIS, Study"],
+  ["computer-vision-study-6", 41, "IRIS - Computer Vision Study · 6차시", "2026-08-06", "CNN concepts and image feature extraction", "Computer Vision, AI, CNN, IRIS, Study"],
+  ["computer-vision-study-7", 42, "IRIS - Computer Vision Study · 7차시", "2026-08-07", "CNN fundamentals and image classification practice", "Computer Vision, AI, CNN, IRIS, Study"],
   ["data-analysis-study", 32, "IRIS - Data Analysis Study · 1차시", "2026-09-01", "Data analysis and visualization", "Data Analysis, Visualization, IRIS, Study"],
 ];
 
@@ -82,7 +84,7 @@ for (const [slug, id, title, published, description, tagList] of selectedSession
   // of flattening them into regular prose.
   const codeBlocks = [];
   body = body.replace(/<pre([^>]*)>([\s\S]*?)<\/pre>/gi, (_, attributes, value) => {
-    const language = id === 39 || id === 40 ? "python" : attributes.match(/data-ke-language="([^"]+)"/i)?.[1] || "";
+    const language = [39, 40, 42].includes(id) ? "python" : attributes.match(/data-ke-language="([^"]+)"/i)?.[1] || "";
     const code = decode(value.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "")).replace(/\u00a0/g, " ").trim();
     const token = `__TISTORY_CODE_BLOCK_${codeBlocks.length}__`;
     codeBlocks.push(`\`\`\`${language}\n${code}\n\`\`\``);
