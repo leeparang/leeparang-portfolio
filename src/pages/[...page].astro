@@ -1,23 +1,21 @@
 ---
 import type { GetStaticPaths } from "astro";
-import Pagination from "../components/control/Pagination.astro";
 import PostPage from "../components/PostPage.astro";
-import { PAGE_SIZE } from "../constants/constants";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
 	const allBlogPosts = await getSortedPosts();
-	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
+	// The home page groups posts by category. Paginating before grouping can
+	// make an entire category disappear when newer posts fill the first page.
+	return paginate(allBlogPosts, { pageSize: Math.max(allBlogPosts.length, 1) });
 }) satisfies GetStaticPaths;
 // https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
 
 const { page } = Astro.props;
 
-const len = page.data.length;
 ---
 
 <MainGridLayout>
     <PostPage page={page}></PostPage>
-    <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
 </MainGridLayout>
