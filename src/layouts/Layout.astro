@@ -515,13 +515,103 @@ window.onresize = () => {
 <script>
 let homeMotionObserver: IntersectionObserver | undefined;
 let homeMotionHookBound = false;
+let homeFilterHookBound = false;
+
+const normalizeHomeFilter = (value: string | null) => value?.trim().toLowerCase() ?? "";
+
+const applyHomeFilter = (filterType?: "category" | "tag", filterValue?: string, updateUrl = false) => {
+	const root = document.querySelector<HTMLElement>(".home-sections");
+	if (!root || window.location.pathname !== "/") return;
+
+	const normalizedValue = normalizeHomeFilter(filterValue ?? "");
+	const sections = Array.from(root.querySelectorAll<HTMLElement>("[data-home-section]"));
+	const cards = Array.from(root.querySelectorAll<HTMLElement>(".home-post-card"));
+	const buttons = Array.from(root.querySelectorAll<HTMLElement>("[data-home-filter]"));
+	const status = root.querySelector<HTMLElement>("[data-home-filter-status]");
+	const statusText = root.querySelector<HTMLElement>("[data-home-filter-status-text]");
+
+	cards.forEach((card) => {
+		let matches = true;
+		if (filterType === "category" && normalizedValue) {
+			matches = normalizeHomeFilter(card.dataset.homeCategory ?? "") === normalizedValue;
+		} else if (filterType === "tag" && normalizedValue) {
+			try {
+				const tags = JSON.parse(card.dataset.homeTags ?? "[]") as string[];
+				matches = tags.some((tag) => normalizeHomeFilter(tag) === normalizedValue);
+			} catch {
+				matches = false;
+			}
+		}
+		card.hidden = !matches;
+	});
+
+	sections.forEach((section) => {
+		section.hidden = !Array.from(section.querySelectorAll<HTMLElement>(".home-post-card"))
+			.some((card) => !card.hidden);
+	});
+
+	buttons.forEach((button) => {
+		const buttonFilter = normalizeHomeFilter(button.dataset.homeFilter ?? "all");
+		const active = filterType === "category" && normalizedValue
+			? buttonFilter === normalizedValue
+			: !filterType && buttonFilter === "all";
+		button.classList.toggle("is-active", active);
+	});
+
+	if (status && statusText) {
+		const showStatus = Boolean(filterType && normalizedValue);
+		status.hidden = !showStatus;
+		statusText.textContent = filterType === "tag"
+			? `Tag: ${filterValue}`
+			: `Category: ${filterValue}`;
+	}
+
+	if (updateUrl) {
+		const nextUrl = new URL(window.location.href);
+		nextUrl.search = "";
+		if (filterType && normalizedValue) nextUrl.searchParams.set(filterType, filterValue ?? "");
+		window.history.pushState({}, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+	}
+};
+
+const applyHomeFilterFromUrl = () => {
+	const params = new URLSearchParams(window.location.search);
+	const tag = params.get("tag");
+	const category = params.get("category");
+	if (tag) applyHomeFilter("tag", tag);
+	else if (category) applyHomeFilter("category", category);
+	else applyHomeFilter();
+};
+
+const installHomeFilters = () => {
+	if (window.location.pathname !== "/" || !document.querySelector(".home-sections")) return;
+	applyHomeFilterFromUrl();
+
+	document.querySelectorAll<HTMLElement>("[data-home-filter]").forEach((button) => {
+		button.onclick = () => {
+			const value = button.dataset.homeFilter ?? "all";
+			if (value === "all") applyHomeFilter(undefined, undefined, true);
+			else applyHomeFilter("category", value, true);
+			requestAnimationFrame(revealHomeCards);
+		};
+	});
+
+	const clearButton = document.querySelector<HTMLElement>("[data-home-filter-clear]");
+	if (clearButton) {
+		clearButton.onclick = () => {
+			applyHomeFilter(undefined, undefined, true);
+			requestAnimationFrame(revealHomeCards);
+		};
+	}
+};
 
 const revealHomeCards = () => {
 	homeMotionObserver?.disconnect();
 	document.documentElement.classList.remove("home-motion-active");
 
 	if (window.location.pathname !== "/" || !("IntersectionObserver" in window)) return;
-	const cards = Array.from(document.querySelectorAll<HTMLElement>(".home-post-card"));
+	const cards = Array.from(document.querySelectorAll<HTMLElement>(".home-post-card"))
+		.filter((card) => !card.hidden && !card.closest<HTMLElement>("[data-home-section]")?.hidden);
 	if (cards.length === 0) return;
 
 	const visibleCards = new Set<HTMLElement>();
@@ -551,10 +641,21 @@ const revealHomeCards = () => {
 };
 
 const installHomeMotion = () => {
+	installHomeFilters();
 	revealHomeCards();
 	if (window.swup && !homeMotionHookBound) {
 		homeMotionHookBound = true;
-		window.swup.hooks.on("page:view", revealHomeCards);
+		window.swup.hooks.on("page:view", () => {
+			installHomeFilters();
+			revealHomeCards();
+		});
+	}
+	if (!homeFilterHookBound) {
+		homeFilterHookBound = true;
+		window.addEventListener("popstate", () => {
+			applyHomeFilterFromUrl();
+			revealHomeCards();
+		});
 	}
 };
 
@@ -565,12 +666,6 @@ if (document.readyState === "loading") {
 }
 document.addEventListener("swup:enable", installHomeMotion, { once: true });
 
-document.addEventListener("click", (event) => {
-	const filter = event.target instanceof Element
-		? event.target.closest("[data-home-filter]")
-		: null;
-	if (filter) requestAnimationFrame(revealHomeCards);
-});
 </script>
 
 <script>
